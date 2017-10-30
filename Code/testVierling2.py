@@ -4,7 +4,7 @@ from capabilities2 import ProduceXY
 
 from models2 import VierlingSimpleModel
 
-from tests2 import Test4040
+from tests2 import Test4040,Test3030,Test2020,Test2040,Test4020
 
 
 
@@ -18,9 +18,9 @@ test_model = VierlingSimpleModel(controlparams,schizparams)
 
 # Tests (note that the observations are not correct!)
 test_4040 = Test4040(observation={'ratio':0.5})
-score_4040 = test_4040.judge(test_model)
-print score_4040
-'''
+#score_4040 = test_4040.judge(test_model)
+#print score_4040
+
 test_3030 = Test3030(observation={'ratio':1.0})
 #score_3030 = test_3030.judge(test_model)
 #print score_3030
@@ -42,7 +42,6 @@ test_4020 = Test4020(observation={'ratio':1.0})
 kwon_vierling_main_suite = sciunit.TestSuite('kwon_vierling_main',[test_4040,test_3030,test_2020,test_4020,test_2040])
 score_matrix = kwon_vierling_main_suite.judge(test_model)
 print score_matrix
-'''
 
 
 
