@@ -16,7 +16,7 @@ def boxplot(data,labels):
 	plt.boxplot(data,labels=labels,showmeans=True)
 	#plt.show()
 
-def experimental_overview(studies=[],observations=[],entrytype='Full_qual',meta=False,dbname='ASSR_experimental_database',plotting=True):
+def experimental_overview(studies=[],observations=[],entrytype='Full_qual',meta=False,dbname='ASSR_schizophrenia_experimental_database',plotting=True):
 	'''Gives an overview of the experimental observations in the database.
 	   Should make possible to query for specific studies, observation types
 	   and meta-data.
