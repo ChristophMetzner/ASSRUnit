@@ -121,3 +121,26 @@ class Test4020(sciunit.Test):
         score.description = 'Passing score if the prediction is larger than the observation'
         return score
 
+
+# 10Hz/10Hz - Prediction test
+class Test1010(sciunit.Test):
+    """Tests the model response at the 10Hz power band at 10Hz drive in the 
+	'schizophrenia-like' condition compared to the control condition."""   
+    
+    def __init__(self,observation = {'ratio':1.4},name='Prediction: 10Hz power to 10Hz drive'):
+	sciunit.Test.__init__(self,observation,name) # Call the base constructor.  
+	self.required_capabilities = (ProduceXY,) 
+
+    score_type = RatioScore  
+    
+    def generate_prediction(self, model):
+        [control1010,schiz1010] = model.produce_XY(10.0,10.0) # The model has this method if it inherits from the 'ProduceXY' capability.
+	return [control1010,schiz1010]    
+
+    def compute_score(self, observation, prediction):
+	if prediction[0]>0.0:
+		result = {'ratio': prediction[1]/prediction[0]}
+        score = self.score_type(result['ratio']/observation['ratio'])
+        score.description = 'Prediction: Score reflects the ratio between power in the control and schizo-like network.'
+        return score
+
