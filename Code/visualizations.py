@@ -301,7 +301,7 @@ def _load_obj(name ):
 	with open(name + '.pkl', 'rb') as f:
 		return pickle.load(f)
 
-def get_studies(dbname='ASSR_experimental_database'):
+def get_studies(dbname='ASSR_schizophrenia_experimental_database'):
 	'''Gives a list of all study identifiers in the database.
 
  	Parameters
@@ -319,7 +319,7 @@ def get_studies(dbname='ASSR_experimental_database'):
 
 	return studies
 
-def get_observations(entrytype='Full',dbname='ASSR_experimental_database'):
+def get_observations(entrytype='Full',dbname='ASSR_schizophrenia_experimental_database'):
 	'''Gives a list of all observation identifiers in the database.
 
  	Parameters
