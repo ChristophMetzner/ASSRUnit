@@ -123,7 +123,7 @@ class Test4020(sciunit.Test):
 
 
 # 10Hz/10Hz - Prediction test
-class Test1010(sciunit.Test):
+class PredictionTest1010(sciunit.Test):
     """Tests the model response at the 10Hz power band at 10Hz drive in the 
 	'schizophrenia-like' condition compared to the control condition."""   
     
