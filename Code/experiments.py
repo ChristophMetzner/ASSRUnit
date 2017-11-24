@@ -6,7 +6,7 @@
 # can be loaded whenever needed.               #
 ################################################
 
-#import cpickle as pickle
+
 import pickle
 
 # Each study is represented by 3 (or in the end maybe even more) different entries:
@@ -52,12 +52,12 @@ database = {'Kwon_1999': kwon,'Vierling_2008': vierling,'Krishnan_2009': krishna
 
 
 
-def save_obj(obj, name ):
+def saveObj(obj, name ):
 	with open(name + '.pkl', 'wb') as f:
 		pickle.dump(obj, f, protocol=2)
 
 
-save_obj(database,'ASSR_schizophrenia_experimental_database')
+saveObj(database,'ASSR_schizophrenia_experimental_database')
 
 
 

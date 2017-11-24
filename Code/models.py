@@ -102,7 +102,7 @@ class ACnet2NML2Model(sciunit.Model,
 
 class ACnet2GenesisModel(sciunit.Model, 
                  Produce4040):
-    """The ACnet2 model (using a slightly modified version of the original Genesis model. For more details see Beeman (2013) and Metzner et al. (2016)"""
+    """The ACnet2 model (using a slightly modified version of the original Genesis model. For more details see Beeman (2013) and Metzner et al. (2016))"""
 
 
 ### TO DO: Get generation and simulation of Genesis version to run!! ###
@@ -168,11 +168,6 @@ class VierlingSimpleModel(sciunit.Model,
 	print 'Schiz PSD calculated'
 	schiz4040 = np.sum(schiz_pxx[19:22]) # Frequency range from 38-42Hz
 
-
-	#print freqs[20]*1000
-	#ax  = control_model.plotPSD(freqs*1000,control_pxx,50.0,0)
-	#ax2 = schiz_model.plotPSD(freqs*1000,schiz_pxx,50.0,0)
-	#plt.show()
 
         return [control4040,schiz4040]
 
@@ -250,9 +245,6 @@ class VierlingSimpleModel(sciunit.Model,
 	schiz2040 = np.sum(schiz_pxx[9:12]) # Frequency range from 28-32Hz
 
 
-	#print freqs[9:12]*1000
-
-
         return [control2040,schiz2040]
 
     def produce_4020(self):
@@ -274,9 +266,6 @@ class VierlingSimpleModel(sciunit.Model,
 	schiz_pxx,freqs = schiz_model.calculatePSD(schiz_meg,self.time)
 	print 'Schiz PSD calculated'
 	schiz4020 = np.sum(schiz_pxx[19:22]) # Frequency range from 28-32Hz
-
-
-	#print freqs[19:22]*1000
 
 
         return [control4020,schiz4020]

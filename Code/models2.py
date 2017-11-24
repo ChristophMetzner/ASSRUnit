@@ -12,6 +12,8 @@ import matplotlib.pylab as plt
 
 
 from Modules.Vierling import simpleModel
+from Modules.Genesis import beemanGenesisModel
+#from Modules.NML2 import beemanNML2Model
 
 ### The model classes ###
 
@@ -20,7 +22,7 @@ class VierlingSimpleModel(sciunit.Model,
                  ProduceXY):
     """The simple model from Vierling-Claassen et al. (2008) """
     
-    def __init__(self, controlparams, schizparams,seed=12345, time=500, name=None): 
+    def __init__(self, controlparams, schizparams,seed=12345, time=500, name='VierlingSimpleModel'): 
         self.controlparams = controlparams
         self.schizparams = schizparams 
 	self.time = time
@@ -89,7 +91,7 @@ class VierlingSimpleModelRobust(sciunit.Model, ProduceXY):
 		print 'Control model simulated' 
 		control_pxx,freqs = control_model.calculatePSD(control_meg,self.time)
 		print 'Control PSD calculated'
-		controlXY[i] = np.sum(control_pxx[lbound:ubound]) # Frequency range from 38-42Hz 
+		controlXY[i] = np.sum(control_pxx[lbound:ubound]) 
 
 		# generate the schizophrenia-like network and run simulation
 		schiz_model = simpleModel(self.schizparams)
@@ -98,7 +100,7 @@ class VierlingSimpleModelRobust(sciunit.Model, ProduceXY):
 		print 'Schiz model simulated' 
 		schiz_pxx,freqs = schiz_model.calculatePSD(schiz_meg,self.time)
 		print 'Schiz PSD calculated'
-		schizXY[i] = np.sum(schiz_pxx[lbound:ubound]) # Frequency range from 38-42Hz
+		schizXY[i] = np.sum(schiz_pxx[lbound:ubound]) 
 
 	mcontrolXY = np.mean(controlXY)
 	mschizXY = np.mean(schizXY)
@@ -127,7 +129,7 @@ class VierlingSimpleModelRobust(sciunit.Model, ProduceXY):
 		print 'Control model simulated' 
 		control_pxx,freqs = control_model.calculatePSD(control_meg,self.time)
 		print 'Control PSD calculated'
-		controlXY[i] = np.sum(control_pxx[lbound:ubound]) # Frequency range from 38-42Hz 
+		controlXY[i] = np.sum(control_pxx[lbound:ubound]) 
 
 		# generate the schizophrenia-like network and run simulation
 		schiz_model = simpleModel(self.schizparams)
@@ -136,10 +138,96 @@ class VierlingSimpleModelRobust(sciunit.Model, ProduceXY):
 		print 'Schiz model simulated' 
 		schiz_pxx,freqs = schiz_model.calculatePSD(schiz_meg,self.time)
 		print 'Schiz PSD calculated'
-		schizXY[i] = np.sum(schiz_pxx[lbound:ubound]) # Frequency range from 38-42Hz
+		schizXY[i] = np.sum(schiz_pxx[lbound:ubound])  
 
 	mcontrolXY = np.mean(controlXY)
 	mschizXY = np.mean(schizXY)
 
         return [mcontrolXY,mschizXY,controlXY,schizXY]
 
+class BeemanGenesisModel(sciunit.Model, ProduceXY):
+    """The auditory cortex model from Beeman (2013) [using a slightly modified version of the original Genesis model; For more details see Metzner et al. (2016)]"""
+    
+    def __init__(self, controlparams, schizparams): 
+	'''
+	Constructor method. Both parameter sets, for the control and the schizophrenia-like network, have to be
+	a dictionary containing the following parmaeters (Filename,Stimulation Frequency,Random Seed,E-E Weight,I-E Weight,E-I Weight,I-I Weight,Background Noise Weight,E-Drive Weight,I-Drive 	
+	Weight,Background Noise Frequency)
+	Parameters:
+	controlparams: Parameters for the control network
+	schizparams: Parameters for the schizophrenia-like network
+	name: name of the instance
+	'''
+        self.controlparams = controlparams
+        self.schizparams = schizparams 
+        super(BeemanGenesisModel, self).__init__(controlparams = controlparams, schizparams = schizparams)
+
+    def produce_XY(self,stimfrequency=40.0,powerfrequency=40.0):
+	'''
+	 Simulates Y Hz drive to the control and the schizophrenia-like network for all random seeds, calculates a Fourier transform of the simulated MEG 
+	 and extracts the power in the X Hz frequency band for each simulation. Returns the mean power for the control and the schizophrenia-like network, respectively.
+	 Note: So far, only three power bands [20,30,40] are possible.
+	'''
+	powerband = 'forty' # default frequency band
+	if powerfrequency == 30.0:
+		powerband = 'thirty'
+	elif powerfrequency == 20.0:
+		powerband = 'twenty'
+	# generate the control network and run simulation
+	print 'Generating control model'
+	ctrl_model = beemanGenesisModel(self.controlparams)
+	print 'Running control model'
+	controlXY = ctrl_model.genesisModelRun(stimfrequency,powerband)
+	
+	# generate the schizophrenia-like network and run simulation
+	print 'Generating schizophrenia model'
+	schiz_model = beemanGenesisModel(self.schizparams)
+	print 'Running schizophrenia model'
+	schizXY = schiz_model.genesisModelRun(stimfrequency,powerband)
+
+
+        return [controlXY,schizXY]
+
+
+class BeemanNML2Model(sciunit.Model, ProduceXY):
+    """NeuroML2 of the auditory cortex model from Beeman (2013)"""
+    
+    def __init__(self, controlparams, schizparams): 
+	'''
+	Constructor method. Both parameter sets, for the control and the schizophrenia-like network, have to be
+	a dictionary containing the following parmaeters (Filename,Stimulation Frequency,Random Seed,E-E Weight,I-E Weight,E-I Weight,I-I Weight,Background Noise Weight,E-Drive Weight,I-Drive 	
+	Weight,Background Noise Frequency)
+	Parameters:
+	controlparams: Parameters for the control network
+	schizparams: Parameters for the schizophrenia-like network
+	name: name of the instance
+	'''
+        self.controlparams = controlparams
+        self.schizparams = schizparams 
+        super(BeemanNML2Model, self).__init__(controlparams = controlparams, schizparams = schizparams)
+
+    def produce_XY(self,stimfrequency=40.0,powerfrequency=40.0):
+	'''
+	 Simulates Y Hz drive to the control and the schizophrenia-like network for all random seeds, calculates a Fourier transform of the simulated MEG 
+	 and extracts the power in the X Hz frequency band for each simulation. Returns the mean power for the control and the schizophrenia-like network, respectively.
+	'''
+	# generate the control network and run simulation
+	print 'Generating control model'
+	ctrl_model = beemanNML2Model(self.controlparams)
+	ctrl_model.createModel()
+	print 'Running control model'
+	ctrl_model.singleRun()
+	print 'Analysing control model'
+	controlXY = ctrl_model.analyse()
+	
+	# generate the schizophrenia-like network and run simulation
+	print 'Generating schizophrenia model'
+	schiz_model = beemanNML2Model(self.schizparams)
+	schiz_model.createModel()
+	print 'Running control model'
+	schiz_model.singleRun()
+	print 'Analysing control model'
+	schizXY = schiz_model.analyse()
+
+
+        return [controlXY,schizXY]
