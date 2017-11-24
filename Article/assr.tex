@@ -22,10 +22,6 @@ ASSRUnit - A Case Study}
 \end{abstract}
 
 \section{Introduction}
-
-%\paragraph{Endophenotypes/Biomarkers of schizophrenia}
-
-
 Research on psychiatric disorders has gradually shifted its focus from
 complex clinical phenotypes towards the identification of biomarkers and 
 endophenotypic measures. This change of focus stems from the hope
@@ -74,20 +70,26 @@ quantities that it can generate predictions about) of the model explicit and by 
 agree with available experimental observations of those quantities.) to be automatically tested \cite{Omar2014}.
 
 In this paper, we  propose to adopt this framework for the computational psychiatry community and to collaboratively build
-common repositories of computational models, test suites and tools.
-As a case in point, we have implemented test suites for auditory steady-state response deficits in schizophrenic patients, which are based on 
+common repositories of computational models, tests, test suites and tools.
+As a case in point, we have implemented a Python module (\textit{ASSRUnit}) for auditory steady-state response (ASSR) deficits in schizophrenic patients, which are based on 
 observations from
 several experimental studies (\cite{Krishnan2009,Vierling2008,Kwon1999})and we demonstrate
-how existing computational models (\cite{Metzner2016,Beeman2013,Vierling2008,Metzner2017})can be validated against these observations and compared with each 
+how existing computational models (\cite{Metzner2016,Beeman2013,Vierling2008,Metzner2017}) can be validated against these observations and compared with each 
 other.
 
-\section{Methods}
+%\section{Methods}
 
-\subsection{The SciUnit Framework}
-The framework we present here is based on the general SciUnit framework for the validation of scientific models against 
-experimental observations \cite{Omar2014} (see Figure \ref{Fig:Scheme}).
+\section{The SciUnit Framework}
+The module we present here is based on the general SciUnit framework for the validation of scientific models against 
+experimental observations \cite{Omar2014} (see Figure \ref{Fig:SciUnit-Scheme}).
 
-\textbf{To Do: Add SciUnit framework figure and reference here instead of scheme.}
+\begin{figure}
+\includegraphics[width=\textwidth]{Figures/SciUnit-Overview-Schematic}
+\caption{\textcolor{red}{Schematic representation of the SciUnit framework. Models can be tested against experimental observations using specific tests. 
+These tests incorporate an experimental observation and interface with the model through capabilities. Tests can be grouped into so-called test suites. The execution of a test 
+produces a score, which describes how well the model captures the experimental observations. SciUnit also provides methods to visualize the resulting score(s), for example in a table.}}
+\label{Fig:SciUnit-Scheme}
+\end{figure}
 
 In SciUnit models declare and implement so-called capabilities, which the validation tests then use to 
 interact with those models. Furthermore, the declaration
@@ -103,12 +105,35 @@ auditory steady-state responses in schizophrenia,
 we first start with a summary of the experimental observations we included in the database and 
 then we describe the computational models which were realized.
 
-\subsection{Experimental Observations Database}
 
-In patients suffering from schizophrenia oscillatory deficits in general and auditory steady-state response (ASSR) deficits in particular have been extensively studied using EEG and MEG 
+\section{\textcolor{red}{The \textit{ASSRUnit} Module}}
+The structure of the module proposed here is shown schematically in Figure \ref{Fig:Scheme}. As outlined earlier, there are three main functionalities the proposed module aims to provide: 1) To provide a simple way of getting an overview
+of the experimental literature, 2) To provide an easy and flexible way to automatically test computational models against experimental observations, 3) To provide an automated way of generating predictions from computational
+models. Functionality 1 is fully covered by the experimental database and its methods to query the database and visualize the results. Functionality 2 is provided by linking both the experimental database as well as the 
+computational models to the SciUnit tests that cover the relevant experimental obervations. The only action required from the user is, if the computational model has not yet been included into the model repository of the module, 
+to provide an interfacing Python class for the model which implements all the required capabilities. Note that the model itself does not have to be written in Python, it only has to be executable from shell. Once the model is
+included, the SciUnit framework allows for automated testing and the visualization methods provided in the proposed module allow for a comprehensive and clear presentation of the results. Functionality 3 can be achieved by
+a set of SciUnit tests and capabilites that, instead of covering experimental observations, cover experiments that have not yet been performed. By running the computational models with these tests, 
+the module can be used to generate new predictions from the models, which can then be used to populate a prediction database similar to the experimental database. The module is available on GitHub: 
+\textit{https://github.com/ChristophMetzner/ASSRUnit}
+
+
+\begin{figure}
+\includegraphics[width=\textwidth]{Figures/SciUnit-Paper-Schematic-2}
+\caption{Schematic representation of the proposed framework highlighting the three main functions: 1) Overview of experimental observations. 2) Validation of computational models. 3) Creation of a predictions database. At its core
+lies the SciUnit module, which provides the infrastructure for the automated validation of the computational models. In particular, through a set of suitable tests, the computational models can be compared against experimental observations
+queried from the experimental database. Another set of tests, the so-called prediction tests, are then employed to extract predictions from the computational models, thus populating the predictions database. }
+\label{Fig:Scheme}
+\end{figure}
+
+
+
+\subsection{\textcolor{red}{Experimental Observations Database}}
+
+In patients suffering from schizophrenia oscillatory deficits in general and ASSR deficits in particular have been extensively studied using EEG and MEG 
 (e.g.  \cite{Kwon1999,Vierling2008,Krishnan2009,
 Light2006,Zhang2016,Hamm2015,Brenner2003,Spencer2009b,Spencer2008,Spencer2012,OConnell2015, Mulert2011}). Here, we focus on three of these studies looking at
-entrainment deficits in the gamma and beta range. Kwon et al. \cite{Kwon1999} used a click train paradigm to study ASSRs at $20$,$30$, and $40$\,Hz in schizophrenic
+entrainment deficits in the gamma and beta range. Kwon et al. \cite{Kwon1999} used a click train paradigm to study ASSRs at $20$, $30$, and $40$\,Hz in schizophrenic
 patients using EEG and found a prominent reduction of power at the driving frequency for $40$\,Hz drive, an increase in power at the driving frequency during $20$\,Hz drive and 
 no changes for $30$\,Hz drive. Furthermore, they found small changes of power at certain harmonic/subharmonic frequencies, namely, an increase of power at $20$\,Hz for $40$\,Hz
 drive and a decrease of power at $40$\,Hz for $20$\,Hz drive. Vierling-Claassen et al. \cite{Vierling2008} reproduced these findings using the same paradigm with MEG. 
@@ -116,7 +141,7 @@ Krishnan et al. \cite{Krishnan2009} used a slightly different paradigm, which em
 frequencies from $5$ to $50$\,Hz. They found reduction of power at the driving frequency in the gamma range (i.e. at $40$, $45$ and $50$\,Hz) and no changes at other frequencies.
 Furthermore, they did not find any changes of power at harmonic or subharmonic frequencies. 
 
-The experimental database is realized as nested Python dictionary, with an entry for each study included.
+The experimental database is realized as a nested Python dictionary, with an entry for each study included.
 Each study entry consists of two entries, which describe the study observations, one in a quantitative way and the other in a qualitative way.
 We have included the qualitative description because often either computational models do not allow for a strict quantitative comparison with 
 experimental data or publications of experimental studies do not provide enough detail on the results, and in these cases, only a qualitative comparison is possible. 
@@ -124,8 +149,10 @@ experimental data or publications of experimental studies do not provide enough 
 \begin{table}[h!]
 \centering
 \label{Tab:Experiments} 
-\caption{Summary of ASSR deficits in schizophrenic patients in the three studies considered here ($\downarrow$: sign. lower in patients, $\uparrow$: sign. higher in patients, $-$: no sign. difference between controls and patients). Since Kwon et al. \cite{Kwon1999} and Vierling-Claassen et al. \cite{Vierling2008}
-produced the same results, they are combined here. Based on this table, we designed the capabilities and tests.}
+\caption{Summary of ASSR deficits in schizophrenic patients in the three studies considered here ($\downarrow$: sign. lower in patients, $\uparrow$: sign. higher in patients, $-$: no sign. difference between controls and patients). 
+Since Kwon et al. \cite{Kwon1999} and Vierling-Claassen et al. \cite{Vierling2008}
+produced the same results, they are combined here. The tests included in the \textit{ASSRUnit} module are based on this table. Note that Krishnan et al. \cite{Krishnan2009} tested more driving frequencies than the ones shown in the table. 
+The table only shows measures that are common to all three studies.}
 \begin{tabular}{lccccccc}\toprule
 & \multicolumn{3}{c}{Fundamental}& \phantom{a} & Harmonic & \phantom{a} & Subharmonic \\
 \cmidrule{2-4} \cmidrule{6-6} \cmidrule{8-8}
@@ -138,8 +165,22 @@ Krishnan & $\downarrow$& -& -& &- & &- \\
 \end{tabular}
 \end{table}
 
+\textcolor{red}{
+Together with the database, \textit{ASSRUnit} provides basic methods to query and visualize the content of the database. These methods include commands to retrieve all studies or observations in the database and a method
+to display an overview of the results for the whole database or for certain studies or observations. Finally, the meta-data associated with each study (for example, the number of participants, the modality, the patient group, etc.)
+can also be retrieved and displayed.}
 
-\subsection{Models of ASSR deficits}
+
+%\subsection{Models of ASSR deficits}
+\subsection{\textcolor{red}{Prediction Database}}
+\textcolor{red}{The prediction database is also realized as a nested Python dictionary. Similar to the experimental observation database, methods that retrieve and visualize the content of the database are included in \textit{ASSRUnit}.}
+
+
+\subsection{\textcolor{red}{Models, Capabilities, Tests and more}}
+
+
+
+\paragraph{\textcolor{red}{Models}}
 In order to demonstrate the flexibility of the proposed framework, we included three different neural models of ASSR deficits.
 
 The first model is based on a biophysically detailed model of primary auditory cortex by Beeman \cite{Beeman2013}. It has recently been used to study 
@@ -158,59 +199,40 @@ Additionally, the inclusion of the model demonstrates the simplest way of includ
 since it is the simplest, we included it here.
 
 We do not discuss the models in more detail here, since they have been described elsewhere \cite{Beeman2013,Metzner2016,Vierling2008,Metzner2017}. Furthermore, our focus lies on the framework with which to use, validate and compare
-models not on the models themselves. Nonetheless, all code, including the code of the three models discussed here, will be available in a github repository (\textit{link to repository}; note that the link to the repository 
-will be added once the manuscript is published on arxiv.).
+models not on the models themselves.
+
+\textcolor{red}{The three models mentioned above are included into the SciUnit framework by wrapper classes that implement the necessary capabilities and make the models available to the tests.
+One important thing to note here, is that, since we are dealing with models of deficits in disorders, that a 'model' as used in the module, always means two configurations of a computational 
+model, one representing the control configuration and one the disorder configuration. Therefore, all wrapper classes take two sets of parameters as an argument describing the necessary parameters
+for the two configurations, respectively.
+In addition to the standard model classes, we also implemented a second version of the model classes, which simulates a certain number $n$ of simulations, instead of a single one, 
+where each simulation differs in background noise. This allows for assessing the robustness of the results.
+}
+
+\paragraph{\textcolor{red}{Capabilities}}
+\textcolor{red}{Table \ref{Tab:Experiments} summarizes the experimental observations included in the module at this stage. All observations are similar in nature: the power value of the EEG/MEG 
+at a certain frequency in response to auditory entrainment at a certain frequency. Therefore, the only capability necessary for a model to produce output that can be compared to these observations
+is a method that produces the power at a certain frequency X of a simulated EEG/MEG signal in response to drive at a frequency Y. This capability, \textit{ProduceXY}, is inlcuded in ASSRUnit and all models
+must implement it.}
+
+\paragraph{\textcolor{red}{Tests and Scores}}
+\textcolor{red}{
+Since tests  The five tests we implemented, test the five observations summarized in Table \ref{Tab:Experiments} individually. Furthermore, we implemented one 
+prediction test, which tests 10\,Hz power at 10\,Hz drive.
+For the sake of simplicity, the test scores implemented so far are simple Boolean score, indicating whether a model output fails or passes a test, i.e. whether the difference 
+between model output for the control and the 'schizophrenia-like' network
+matches the experimental observation. In case of the model classes implementing sets of outputs, simply the mean difference is compared to the experimental observations.
+The only test, where the score is not a Boolean, is the prediction test, since here we do not have an experimental value to compare to. Here, we have chosen a RatioScore, which
+returns the ratio of the power for the 'schizophrenia-like'  configuration and the power for the control configuration.
+}
 
 
-\section{Results}
 
-The framework proposed here is shown schematically in Figure \ref{Fig:Scheme}. As outlined earlier, there are three main functionalities the proposed module aims to provide: 1) To provide a simple way of getting an overview
-of the experimental literature, 2) To provide an easy and flexible way to automatically validate computational models against experimental observations, 3) To provide an automated way of generating predictions from computational
-models. Functionality 1 is fully covered by the experimental database and its methods to query the database and visualize the results. Functionality 2 is provided by linking both the experimental database as well as the 
-computational models to the SciUnit tests that cover the relevant experimental obervations. The only action required from the user is, if the computational model has not yet been included into the model repository of the module, 
-to provide an interfacing Python class for the model which implements all the required capabilities. Note that the model itself does not have to be written in Python, it only has to be executable from shell. Once the model is
-included, the SciUnit framework allows for automated testing and the visualization methods provided in the proposed module allow for a comprehensive and clear presentation of the results. Functionality 3 can be achieved by
-a set of SciUnit tests and capabilites that, instead of covering experimental observations, cover experiments that have not yet been performed. By running the computational models with these tests, 
-the module can be used to generate new predictions from the models, which can then be used to populate a prediction database similar to the experimental database.
+\paragraph{\textcolor{red}{Visualization, Statistics, Additional Data}}
 
-\begin{figure}
-\includegraphics[width=\textwidth]{Figures/SciUnit-Paper-Schematic}
-\caption{Schematic representation of the proposed framework highlighting the three main functions: 1) Overview of experimental observations. 2) Validation of computational models. 3) Creation of a predictions database. At its core
-lies the SciUnit module, which provides the infrastructure for the automated validation of the computational models. In particular, through a set of suitable tests, the computational models can be compared against experimental observations
-queried from the experimental database. Lastly, another set of model capabilites, the so-called prediction capabilites, are then employed to extract predictions from the computational models, thus populating the predictions database. }
-\label{Fig:Scheme}
-\end{figure}
-
-
-\textbf{TO DO: Add more detailed description of the internals of the module}
-
-% \subsection{Implementation}
-% \subsubsection{Capabilities}
-% Table \ref{Tab:Experiments} summarizes the experimental observations we want to include in the framework presented here. This directly tells us how to define the capabilities
-% which our models have to produce. A model within our framework must be able to produce each of the five capabilities included in Table \ref{Tab:Experiments}. Accordingly,
-% our capabilities file comprises five classes, each defining one of the capabilities. However, note that the experimental observations summarized in Table \ref{Tab:Experiments}
-% describe the difference between healthy control subjects and schizophrenic patients. Therefore, the capabilities do not merely require the model to produce power at $x$\,Hz
-% in response to $y$\,Hz drive, the model has to produce this power for two different versions of the model, one representing the healthy control network and one representing
-% the 'schizophrenia-like' network. 
-% 
-% 
-% \subsubsection{Model(s)}
-% 
-% 
-% \subsubsection{Score(s)}
-% For the sake of simplicity, the test scores implemented so far are simple Boolean score, indicating whether a model output fails or passes a test, i.e. whether the difference 
-% between model output for the control and the 'schizophrenia-like' network
-% matches the experimental observation. In case of the model classes implementing sets of outputs, simply the mean difference is compared to the experimental observations.
-% 
-% \subsubsection{Tests/Testsuites}
-% The five tests we have implemented, test the five observations summarized in Table \ref{Tab:Experiments} individually. Additionally, we have implemented two testsuites which combine some of
-% the individual observations. The first one comprises the tests for the fundamental frequencies at the three drive frequencies. The second one, additionally tests the (sub)harmonics for $20$ and $40$\,Hz, respectively. 
-% 
-% 
-% \subsubsection{Data Visualisation}
-% In addition to the main features of the SciUnit framework for the analysis and comparison of the models, we use the fact that SciUnit allows to pass additional data, beyond the test scores, to provide
-% a class that offers tools for the visualization of the results. This class includes functions to display the test results in a table, to plot the test results as a bar graph, to plot the results from a set of model outputs as 
-% a box plot, to perform and visualize a student's t-test of the differences between control and 'schizophrenia-like' networks.
+\textcolor{red}{In addition to the main features of the SciUnit framework for the analysis and comparison of the models, we use the fact that SciUnit allows to pass additional data, beyond the test scores, to provide
+a class that offers tools for the visualization of the results. This class includes functions to display the test results in a table, to plot the test results as a bar graph, to plot the results from a set of model outputs as 
+a box plot, to perform and visualize a student's t-test of the differences between control and 'schizophrenia-like' networks}
 
 
 Next, we describe three different use cases, which show how the proposed module can be used for different purposes by experimentalists, modelers and reviewers. 
@@ -233,7 +255,7 @@ The overview command presents the data in a simple table and can be used to see 
 which observation and what the results were. However, as we can already see for our small demonstration database containing only three studies, this is likely to become big and therefore hard to fully grasp.
 By explicitly stating the studies and/or the observations one is interested in, one can reduce the complexity of the table and get a clear and simple overview, as depicted in Figure \ref{Fig:ExpOverview2}. Note that in the
 examples, we have only used the qualitative description of the observations, the same functionality also applies to the quantitative descriptions. The functionality described here, along with
-more examples, can be explored in an accompanying Python notebook (\textit{Example\_Experimental\_Database.ipynb} in \textit{link to the notebook folder}).
+more examples, can be explored in an accompanying Python notebook (\textit{Example\_Experimental\_Database.ipynb} in \textit{https://github.com/ChristophMetzner/ASSRUnit/Code/}).
 
 \begin{figure}
 \subfigure[Full overview]
@@ -283,8 +305,9 @@ are run against the test suite. d) A comparison table shows the performance of e
 \end{figure}
 
 \paragraph{Advanced modeling data and visualization}
-As already described in the Methods section, the model classes do not only contain the standard methods that implement the necessary capabilities, but also contain so-called '...\_plus' methods (\textit{That is not a very good term. 
-We have to come up with a better name for them}) which generate additional model data. Together with the methods from the visualization class, this additional model data can be used to better understand the model behavior, 
+As already described in the Methods section, the model classes do not only contain the standard methods that implement the necessary capabilities, but also contain so-called '...\_plus' methods 
+%(\textit{That is not a very good term. We have to come up with a better name for them}) 
+which generate additional model data. Together with the methods from the visualization class, this additional model data can be used to better understand the model behavior, 
 to judge the robustness of findings and to statistically analyze model output. Figure \ref{Fig:ModelPlusMethods}
 
 \begin{figure}
@@ -300,7 +323,8 @@ as a boxplot. c) Statistical analysis of the additional model data.}
 \end{figure}
 
 \subsection{Use Case III: Overview over Model Predictions}
-Finally, we show how predictions can be generated from existing models (see Figure \ref{Fig:ModelPlusMethods}). In order to generate the predictions, a set of prediction tests along with prediction capabilities, that is, capabilities the models must have 
+Finally, we show how predictions can be generated from existing models (see Figure \ref{Fig:ModelPlusMethods}). In order to generate the predictions, a set of prediction tests along with prediction capabilities, that is, 
+capabilities the models must have 
 in order for the model to generate the relevant data needs to be created. For demonstration purposes, we have chosen to implement a single, simple prediction test. Since in \textit{ASSRUnit} so far, we have only looked 
 at experimental observations and computational models that cover gamma and beta range entrainment, the first test simply generates a prediction how, in a given model, power in the alpha band (here at 10\,Hz)
 differs between the control network and the schizophrenia-like network at 10\,Hz drive.
