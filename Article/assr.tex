@@ -4,13 +4,14 @@
 \usepackage{graphicx}
 \usepackage{listings}
 \usepackage{subfigure}
+\usepackage{rotating}
 \usepackage{placeins}
 \usepackage{pdfpages}
 
 %opening
 \title{Modules for Automated Validation and Comparison of Models of Neurophysiological and Neurocognitive Biomarkers of Psychiatric Disorders:
 ASSRUnit - A Case Study} 
-\author{Christoph Metzner, Tuomo M\"aki-Marttunen, Achim Schweikard, \\ Bartosz Zurowski and Volker Steuber}
+\author{Christoph Metzner, Tuomo M\"aki-Marttunen, \\ Bartosz Zurowski and Volker Steuber}
 
 \begin{document}
 \lstset{language=Python}
@@ -22,20 +23,19 @@ ASSRUnit - A Case Study}
 \end{abstract}
 
 \section{Introduction}
-Research on psychiatric disorders has gradually shifted its focus from
-complex clinical phenotypes towards the identification of biomarkers and 
-endophenotypic measures. This change of focus stems from the hope
-that these measures might map nicely to genetic 
+Psychiatric nosology, for centuries widely untouched by findings from (clinical) neuroscience is at the beginning of a transformation process \cite{Friston2017} 
+towards an interactive evolution of diagnostic and biological categories. TThis change of focus stems from the hope
+that biomarkers and endophenotypic measures show a better correspondence with genetic 
 alterations identified by large genome-wide association studies \cite{Meyer2006} and promises to more readily shed light on the mechanisms underlying
-these disorders and to facilitate the discovery of novel medications \cite{Siekmeier2015}.
+these disorders and to facilitate the discovery of novel interventions \cite{Siekmeier2015}.
 Naturally, a lot of effort has been put into the translation of these measures into practice using human studies \cite{Perlis2011}
 as well as animal models \cite{Markou2009}
 
 Computational approaches also have gained significantly more attention over the last years and this has led to the emergence of 
 'Computational Psychiatry'
-as an independent discipline (see e.g. \cite{Montague2012,Wang2014,Friston2014,Corlett2014,Stephan2014,Adams2016}).
+as a novel multidisciplinary and integrative discipline (see for example \cite{Montague2012,Wang2014,Friston2014,Corlett2014,Stephan2014,Adams2016}).
 This emergence can be attributed to three main factors: First, the above mentioned increase in experimental studies has provided 
-a wealth of anatomical and neurophysiological data which are essential to build  computational models. Second, methodological and infrastructural advances,
+a wealth of neuroscientific (including neurochemical, molecular, anatomic, and neurophysiological) data which are essential to build  computational models. Second, methodological and infrastructural advances,
 such as the  various atlases, databases and online tools from the Allen Brain Institute (\textit{http://brain-map.org/}) or the BRAIN initiative 
 (\textit{https://www.braininitiative.nih.gov/}),
 have made it possible to analyze and process this enormous amount of data. Third, the increase in computing power of high performance
@@ -56,18 +56,18 @@ studies grows rapidly, as is the case for psychiatry, this becomes more and more
 Furthermore, the increase in modeling and experimental studies has made it harder for reviewers not only to judge whether a new model adequately 
 replicates the full range of experimental observations but also how it compares to competing models. Again, also reviewers need an 
 in-depth knowledge of the modeling
-and experimental literature.
-Finally, since computational modeling tries to generate predictions which can be experimentally tested, experimentalists must be able 
+and experimental literature as well as profound statistical knowledge.
+Finally, since computational modeling tries to generate predictions which can be experimentally tested, experimental neuroscientists must be able 
 to extract and assess predictions from a rapidly growing body of computational models, a task which is also becoming more and more impracticable.
 
 The problems described above are not unique to the field of computational psychiatry but occur in all scientific areas that use computational models.
-Furthermore, building, i.e. implementing, a computational model is in the end a software development project of sort. Omar et al. \cite{Omar2014}
+Furthermore, building a computational model is in the end a software development project of sort. Omar et al. \cite{Omar2014}
 have therefore
 proposed a framework for automated validation of scientific models, SciUnit, which is based on unit testing, a technique commonly used in software 
 development.
 SciUnit addresses the problems mentioned above by making the scope (i.e. the set of observable
 quantities that it can generate predictions about) of the model explicit and by allowing its validity (i.e. the extent to which its predictions
-agree with available experimental observations of those quantities.) to be automatically tested \cite{Omar2014}.
+agree with available experimental observations of those quantities) to be automatically tested \cite{Omar2014}.
 
 In this paper, we  propose to adopt this framework for the computational psychiatry community and to collaboratively build
 common repositories of computational models, tests, test suites and tools.
@@ -85,29 +85,30 @@ experimental observations \cite{Omar2014} (see Figure \ref{Fig:SciUnit-Scheme}).
 
 \begin{figure}
 \includegraphics[width=\textwidth]{Figures/SciUnit-Overview-Schematic}
-\caption{\textcolor{red}{Schematic representation of the SciUnit framework. Models can be tested against experimental observations using specific tests. 
+\caption{Schematic representation of the SciUnit framework. Models can be tested against experimental observations using specific tests. 
 These tests incorporate an experimental observation and interface with the model through capabilities. Tests can be grouped into so-called test suites. The execution of a test 
-produces a score, which describes how well the model captures the experimental observations. SciUnit also provides methods to visualize the resulting score(s), for example in a table.}}
+produces a score, which describes how well the model captures the experimental observations. SciUnit also provides methods to visualize the resulting score(s), for example in a table.}
 \label{Fig:SciUnit-Scheme}
 \end{figure}
 
 In SciUnit models declare and implement so-called capabilities, which the validation tests then use to 
-interact with those models. Furthermore, the declaration
-and implementation of capabilities is separated, which allows to test two different models which share the 
-same capabilities on the same experimental observations using
-the same test. Tests then take the model, use its capabilities to generate data and compare these data to the 
+interact with those models. By a capability of the model, we mean the ability of the model to describe certain biological phenomena that are possible to assess using physical quantities.
+Furthermore, the declaration
+and implementation of capabilities are separated, which allows to test two different models that share the 
+\textit{same capabilities} on the \textit{same experimental observations} using
+the \textit{same test}. Tests then take the model, use its capabilities to generate data and compare these data to the 
 experimental observations which are linked to the test
 and create a score. This score, which can simply be a Boolean (pass/fail) or another more complex score type, 
 describes if and to which extent the model data and the experimental observation(s) match.
 
 Before we describe the actual implementations of capabilities, models, tests and scores in our framework for 
-auditory steady-state responses in schizophrenia,
+ASSRs in schizophrenia,
 we first start with a summary of the experimental observations we included in the database and 
 then we describe the computational models which were realized.
 
 
-\section{\textcolor{red}{The \textit{ASSRUnit} Module}}
-The structure of the module proposed here is shown schematically in Figure \ref{Fig:Scheme}. As outlined earlier, there are three main functionalities the proposed module aims to provide: 1) To provide a simple way of getting an overview
+\section{The \textit{ASSRUnit} Module}
+The structure of the ASSRUnit module proposed here is shown schematically in Figure \ref{Fig:Scheme}. As outlined earlier, there are three main functionalities the proposed module aims to provide: 1) To provide a simple way of getting an overview
 of the experimental literature, 2) To provide an easy and flexible way to automatically test computational models against experimental observations, 3) To provide an automated way of generating predictions from computational
 models. Functionality 1 is fully covered by the experimental database and its methods to query the database and visualize the results. Functionality 2 is provided by linking both the experimental database as well as the 
 computational models to the SciUnit tests that cover the relevant experimental obervations. The only action required from the user is, if the computational model has not yet been included into the model repository of the module, 
@@ -128,9 +129,10 @@ queried from the experimental database. Another set of tests, the so-called pred
 
 
 
-\subsection{\textcolor{red}{Experimental Observations Database}}
+\subsection{Experimental Observations Database}
 
-In patients suffering from schizophrenia oscillatory deficits in general and ASSR deficits in particular have been extensively studied using EEG and MEG 
+In patients suffering from schizophrenia oscillatory deficits in general and ASSR deficits in particular have been extensively studied using electroencephalography (EEG) and 
+magnetoencephalography (MEG) 
 (e.g.  \cite{Kwon1999,Vierling2008,Krishnan2009,
 Light2006,Zhang2016,Hamm2015,Brenner2003,Spencer2009b,Spencer2008,Spencer2012,OConnell2015, Mulert2011}). Here, we focus on three of these studies looking at
 entrainment deficits in the gamma and beta range. Kwon et al. \cite{Kwon1999} used a click train paradigm to study ASSRs at $20$, $30$, and $40$\,Hz in schizophrenic
@@ -165,22 +167,22 @@ Krishnan & $\downarrow$& -& -& &- & &- \\
 \end{tabular}
 \end{table}
 
-\textcolor{red}{
+
 Together with the database, \textit{ASSRUnit} provides basic methods to query and visualize the content of the database. These methods include commands to retrieve all studies or observations in the database and a method
 to display an overview of the results for the whole database or for certain studies or observations. Finally, the meta-data associated with each study (for example, the number of participants, the modality, the patient group, etc.)
-can also be retrieved and displayed.}
+can also be retrieved and displayed.
 
 
 %\subsection{Models of ASSR deficits}
-\subsection{\textcolor{red}{Prediction Database}}
-\textcolor{red}{The prediction database is also realized as a nested Python dictionary. Similar to the experimental observation database, methods that retrieve and visualize the content of the database are included in \textit{ASSRUnit}.}
+\subsection{Prediction Database}
+The prediction database is also implemented as a nested Python dictionary. Similar to the experimental observation database, methods that retrieve and visualize the content of the database are included in \textit{ASSRUnit}.
 
 
-\subsection{\textcolor{red}{Models, Capabilities, Tests and more}}
+\subsection{Models, Capabilities, Tests and more}
 
 
 
-\paragraph{\textcolor{red}{Models}}
+\paragraph{Models}
 In order to demonstrate the flexibility of the proposed framework, we included three different neural models of ASSR deficits.
 
 The first model is based on a biophysically detailed model of primary auditory cortex by Beeman \cite{Beeman2013}. It has recently been used to study 
@@ -201,46 +203,44 @@ since it is the simplest, we included it here.
 We do not discuss the models in more detail here, since they have been described elsewhere \cite{Beeman2013,Metzner2016,Vierling2008,Metzner2017}. Furthermore, our focus lies on the framework with which to use, validate and compare
 models not on the models themselves.
 
-\textcolor{red}{The three models mentioned above are included into the SciUnit framework by wrapper classes that implement the necessary capabilities and make the models available to the tests.
-One important thing to note here, is that, since we are dealing with models of deficits in disorders, that a 'model' as used in the module, always means two configurations of a computational 
+The three models mentioned above are included into the SciUnit framework by wrapper classes that implement the necessary capabilities and make the models available to the tests.
+One important thing to note here is that, since we are dealing with models of neurofunctional deficits found in individuals with a particular disorder, a 'model' as used in the module always means two configurations of a computational 
 model, one representing the control configuration and one the disorder configuration. Therefore, all wrapper classes take two sets of parameters as an argument describing the necessary parameters
 for the two configurations, respectively.
 In addition to the standard model classes, we also implemented a second version of the model classes, which simulates a certain number $n$ of simulations, instead of a single one, 
 where each simulation differs in background noise. This allows for assessing the robustness of the results.
-}
 
-\paragraph{\textcolor{red}{Capabilities}}
-\textcolor{red}{Table \ref{Tab:Experiments} summarizes the experimental observations included in the module at this stage. All observations are similar in nature: the power value of the EEG/MEG 
+
+\paragraph{Capabilities}
+Table \ref{Tab:Experiments} summarizes the experimental observations included in the module at this stage. All observations are similar in nature: the power value of the EEG/MEG 
 at a certain frequency in response to auditory entrainment at a certain frequency. Therefore, the only capability necessary for a model to produce output that can be compared to these observations
-is a method that produces the power at a certain frequency X of a simulated EEG/MEG signal in response to drive at a frequency Y. This capability, \textit{ProduceXY}, is inlcuded in ASSRUnit and all models
-must implement it.}
+is a method that produces the power at a certain frequency X of a simulated EEG/MEG signal in response to drive at a frequency Y. This capability, \textit{ProduceXY}, is included in ASSRUnit and all models
+must implement it.
 
-\paragraph{\textcolor{red}{Tests and Scores}}
-\textcolor{red}{
-Since tests  The five tests we implemented, test the five observations summarized in Table \ref{Tab:Experiments} individually. Furthermore, we implemented one 
+\paragraph{Tests and Scores}
+The five tests we implemented, examine the five observations summarized in Table \ref{Tab:Experiments} individually. Furthermore, we implemented one 
 prediction test, which tests 10\,Hz power at 10\,Hz drive.
-For the sake of simplicity, the test scores implemented so far are simple Boolean score, indicating whether a model output fails or passes a test, i.e. whether the difference 
+For the sake of simplicity, the test scores implemented so far are simple Boolean scores, indicating whether a model output fails or passes a test, that is whether the difference 
 between model output for the control and the 'schizophrenia-like' network
 matches the experimental observation. In case of the model classes implementing sets of outputs, simply the mean difference is compared to the experimental observations.
-The only test, where the score is not a Boolean, is the prediction test, since here we do not have an experimental value to compare to. Here, we have chosen a RatioScore, which
+For the prediction test we have chosen a RatioScore instead of a Boolean, which
 returns the ratio of the power for the 'schizophrenia-like'  configuration and the power for the control configuration.
-}
 
 
 
-\paragraph{\textcolor{red}{Visualization, Statistics, Additional Data}}
 
-\textcolor{red}{In addition to the main features of the SciUnit framework for the analysis and comparison of the models, we use the fact that SciUnit allows to pass additional data, beyond the test scores, to provide
-a class that offers tools for the visualization of the results. This class includes functions to display the test results in a table, to plot the test results as a bar graph, to plot the results from a set of model outputs as 
-a box plot, to perform and visualize a student's t-test of the differences between control and 'schizophrenia-like' networks}
+\paragraph{Visualization, Statistics, Additional Data}
 
+In addition to the main features of the SciUnit framework for the analysis and comparison of the models, we use the fact that SciUnit allows to pass additional data, beyond the test scores, to provide
+a class that offers tools for the visualization of the results. This class includes functions to display the test results in a table, plot the results from a set of model outputs as 
+a box plot, and perform and visualize a student's t-test of the differences between control and 'schizophrenia-like' networks.
 
 Next, we describe three different use cases, which show how the proposed module can be used for different purposes by experimentalists, modelers and reviewers. 
 
 
 \subsection{Use Case I: Overview of the Experimental Literature}
 The first use case demonstrates how the experimental database can be used to get a comprehensive overview of the current experimental literature related to a neurophysiological or neurocognitive biomarker, in our case
-auditory steady-state response deficits in patients suffering from schizophrenia. Figure \ref{Fig:ListStudies} shows that with two
+ASSR deficits in patients suffering from schizophrenia. Figure \ref{Fig:ListStudies} shows that with two
 simple commands one can retrieve the names of all studies and all observations present in the database. These names will have to be used for all further queries of the database.
 
 \begin{figure}
@@ -249,22 +249,27 @@ simple commands one can retrieve the names of all studies and all observations p
 \label{Fig:ListStudies}
 \end{figure}
 
-Figure \ref{Fig:ExpOverview1} a) then shows how to get a complete overview of all observations of all studies in the database. As we can see in Figure \ref{Fig:ExpOverview1} b), simply adding the parameter \textit{meta=true},
-to the command, will additionally output the meta-data associated with each study. This contains information on the subjects, modality and so on.
+Figure \ref{Fig:ExpOverview1} a) then shows how to get a complete overview of all observations of all studies in the database. As we can see in Figures \ref{Fig:ExpOverview0} \ref{Fig:ExpOverview1} b), simply adding the parameter \textit{meta=true},
+to the command, will additionally output the meta-data associated with each study. This contains information on the subjects, modality etc.
 The overview command presents the data in a simple table and can be used to see which studies provided 
 which observation and what the results were. However, as we can already see for our small demonstration database containing only three studies, this is likely to become big and therefore hard to fully grasp.
 By explicitly stating the studies and/or the observations one is interested in, one can reduce the complexity of the table and get a clear and simple overview, as depicted in Figure \ref{Fig:ExpOverview2}. Note that in the
 examples, we have only used the qualitative description of the observations, the same functionality also applies to the quantitative descriptions. The functionality described here, along with
 more examples, can be explored in an accompanying Python notebook (\textit{Example\_Experimental\_Database.ipynb} in \textit{https://github.com/ChristophMetzner/ASSRUnit/Code/}).
 
+
+\begin{sidewaysfigure}[ht]
+\includegraphics[width=\textwidth]{Figures/full_overview2}
+\caption{Overview of the observations in the experimental literature.  The command \textit{experimental\_overview} prints a table summarizing the results for all studies and all observations in the database. 
+ Note that by default the qualitative study results are presented. This can be changed to the quantitative results
+setting the parameter \textit{entrytype} to \textit{Full}.}
+\label{Fig:ExpOverview0}
+\end{sidewaysfigure}
+
+
 \begin{figure}
-\subfigure[Full overview]
-{\includegraphics[width=\textwidth]{Figures/full_overview2}}
-\subfigure[Including meta data]
-{\includegraphics[width=\textwidth]{Figures/display_meta2}}
-\caption{Overviews of the observations in the experimental literature. a) The command \textit{experimental\_overview} prints a table summarizing the results for all studies and all observations in the database.
-b) By setting the \textit{meta} flag to \textit{True}, additional information on the studies are displayed. Note that by default the qualitative study results are presented. This can be changed to the quantitative results
-setting the parameter \textit{entrytype} to \textit{Full}. }
+\includegraphics[width=\textwidth]{Figures/display_meta2}
+\caption{ By setting the \textit{meta} flag to \textit{True}, additional information on the studies are displayed.}
 \label{Fig:ExpOverview1}
 \end{figure}
 
@@ -285,10 +290,10 @@ to look at more than one database and compare the same observations across diffe
 While our first use case only exploited the experimental database, we now show the additional benefits of joining experimental and modeling data. 
 
 \paragraph{Simple model comparison}
-By creating tests, based on the models capabilities, and grouping 
+By creating tests, based on the model capabilities, and grouping 
 them into test suites, we can easily compare models against experimental data and against each other. Figure \ref{Fig:ModelComparisons} demonstrates how we can use the module to create two different models along with
 several tests, then run the models to produce the data relevant for the tests and then judge the model outputs against experimental data and  display the result together. Note that in this context
-we use model as the \textit{in silico} instantiation of a theoretical/conceptual model. Two different models therefore, do not necessarily have to use different model implementations but might simply differ in parameters.
+we use the term model as the \textit{in silico} instantiation of a theoretical/conceptual model. Two different models therefore, do not necessarily have to use different model implementations but might simply differ in parameters.
 
 \begin{figure}
 \subfigure[Create model instances]
@@ -299,7 +304,7 @@ we use model as the \textit{in silico} instantiation of a theoretical/conceptual
 {\includegraphics[width=0.9\textwidth]{Figures/testsuite}}
 \subfigure[Display comparison]
 {\includegraphics[width=0.9\textwidth]{Figures/model_comparison_table}}
-\caption{Two models compared against each other and experimental observations. a) Model instances are created. b) Appropriate tests are created. c) Tests are grouped together to form a test suite, then the models
+\caption{Contrasting the results of comparing two models against experimental observations. a) Model instances are created. b) Appropriate tests are created. c) Tests are grouped together to form a test suite, then the models
 are run against the test suite. d) A comparison table shows the performance of each model against each test.}
 \label{Fig:ModelComparisons}
 \end{figure}
@@ -308,7 +313,7 @@ are run against the test suite. d) A comparison table shows the performance of e
 As already described in the Methods section, the model classes do not only contain the standard methods that implement the necessary capabilities, but also contain so-called '...\_plus' methods 
 %(\textit{That is not a very good term. We have to come up with a better name for them}) 
 which generate additional model data. Together with the methods from the visualization class, this additional model data can be used to better understand the model behavior, 
-to judge the robustness of findings and to statistically analyze model output. Figure \ref{Fig:ModelPlusMethods}
+to judge the robustness of findings and to statistically analyze model output (see Figure \ref{Fig:ModelPlusMethods}).
 
 \begin{figure}
 \subfigure[Create model instances and run simulation]
@@ -346,10 +351,10 @@ However, we have chosen to include it for the purpose of demonstration.
 
 \paragraph{The potential role of the framework within computational psychiatry}
 The use of computational approaches has seen a significant increase over the last decades in almost all areas of medicine and life sciences. Especially in psychiatry it has 
-become clear that the complex and often polygenic nature of psychiatric disorders can only be understood with the help of computational models \cite{Adams2016,Wang2014,Friston2014,Corlett2014,Stephan2014,
+become clear that the complex and often polygenic nature of psychiatric disorders might only be understood with the help of computational models \cite{Adams2016,Wang2014,Friston2014,Corlett2014,Stephan2014,
 Montague2012,Siekmeier2015}.
 Naturally, the number of computational models in the field of psychiatry has also increased significantly over the last years and it has been argued that 
-\textit{in silico} instantiations of biomarkers and endophenotypes are a crucial step towards an understanding of underlying disease mechanisms \cite{Siekmeier2015}. While, this large increase in 
+\textit{in silico} instantiations of biomarkers and endophenotypes are a crucial step towards an understanding of underlying disease mechanisms \cite{Siekmeier2015}. While this large increase in 
 modeling studies shows the importance of computational methods in the field, it also raises several issues that, impede the community to exploit these 
 approaches to their full potential. In order for a computational model to be a substantial contribution to knowledge it has to adequately instantiate experimental observations,
 correctly implement the mathematical equations of the model and generate experimentally testable predictions. The approach presented here, addresses two of these three requirements, namely, 
@@ -359,7 +364,7 @@ approach  presented here offers significant benefits for, not only the computati
 for the users and contributors. It gives modelers a tool to query experimental observations on neurophysiological and neurocognitive biomarkers, and therefore, helps them to
 include the current relevant experimental data into their modeling efforts. It further enables them to validate their modeling output against experimental observations during model construction
 and to demonstrate the performance of their model, both, with respect to the experimental literature and with respect to other competing models. In addition to the benefits it offers
-the modelers it also enables experimentalists to quickly gain insight into the current state of modeling and to extract experimentally testable predictions from the models. Last but not least,
+the modelers, it also enables experimentalists to quickly gain insight into the current state of modeling and to extract experimentally testable predictions from the models. Last but not least,
 it offers a tool to reviewers which allows them to judge a newly proposed model by making explicit its performance against experimental data and competing models.
 
 The concept of automated code testing and validation has been successfully applied in computer science for many years now, however, it is only slowly finding its way into the computational 
@@ -374,10 +379,11 @@ and changes at the synaptic,cellular and/or network level.
 
 
 \paragraph{Future directions for ASSRUnit}
-The presented \textit{ASSRUnit} module can be easily extended and modified by others to fit their needs (for example to include  more and more specialized visualization tools). Our efforts
+The presented \textit{ASSRUnit} module can be easily extended and modified by others to fit their needs (for example to include  more specialized visualization tools). Our efforts
 for establishing \textit{ASSRUnit} as a widely used tool will focus on three main areas: 1) We aim to cover the majority of existing experimental studies with our experimental database in the future.
 Furthermore, we hope to convince experimentalists to provide more detailed experimental data or to
-even create database entries themselves. 2) We also aim to cover the majority of current computational models. Again, we hope to encourage modelers to actively contribute to \textit{ASSRUnit}.
+ideally create database entries themselves. 2) We also aim to cover the majority of current computational models that describe the cortical circuitry responsible for the ASSR. 
+Again, we hope to encourage modelers to actively contribute to \textit{ASSRUnit}.
 3) We aim to extend our set of prediction tests, and thus, our prediction database. 
 
 The most straightforward extension, in our view, is to include information on phase-locking in addition to 
@@ -393,13 +399,14 @@ the auditory system (see \cite{Basar2013}). To the best of our knowledge, ASSRs 
 used to generate predictions in these frequency ranges as demonstrated in use case III.
 
 However, an inclusion of the above-mentioned observations together with computational models explaining these deficits is not straightforward, because either the paradigms are different from the ones
-used to elicit ASSRs and/or the mechanisms underlying the effect, and therefore the computational models, are substantially different to ASSRs. Therefore, these deficits are better explored in separate modules solely focusing
+used to elicit ASSRs and/or the mechanisms underlying the effect are different, and therefore the computational models, are substantially different to models of ASSRs. Therefore, these deficits are better explored in separate modules solely focusing
 on each paradigm/deficit. However, it would be very interesting to 'co-explore' computational models that have the capabilities to explain both, ASSR gamma/beta band and delta/theta/alpha phase-locking, deficits. Such an analysis 
 could highlight interactions between different mechanisms underlying different symptoms/biomarkers.
 
 Another very interesting and promising extension of the current module would be to include data and models from different psychiatric disorders, since schizophrenia is not the only disorder
 where patients show entrainment deficits. Wilson et al. \cite{Wilson2007}, explored gamma power adolescents with psychosis and found reductions compared to normally developing controls. Their patient group
-consisted of patients suffering from schizophrenia and also from schizoaffective disorder and bipolar disorder. Other studies have also found reduced power and phase-locking in the gamma range in patients 
+consisted of patients suffering from schizophrenia and also from schizoaffective disorder and bipolar disorder. Interestingly, these disorders show overlapping symptoms, neurobiological substrates and predisposing gene loci. 
+Other studies have also found reduced power and phase-locking in the gamma range in patients 
 with bipolar disorder \cite{ODonnell2004,Spencer2008,Rass2010}.
 The presented module is perfectly suited to highlight commonalities and differences across disorders and to link those to mechanistic 
 explanations via different theoretical/computational models.
@@ -420,17 +427,19 @@ Several models explaining mechanisms underlying MMN/SSA have been proposed (for 
 The P50 potential, a small positive deflection of the EEG signal at around 50\,ms after the onset of an auditory stimulus, is often reduced to the second of a pair of stimuli.
 However, this so-called P50 reduction is markedly reduced in schizophrenic patients (for example \cite{Braff2007}). Another important measure of sensory gating is the pre-pulse inhibition (PPI) of
 the auditory startle reflex (i.e. the phenomenon in which a weaker prestimulus inhibits the reaction to a subsequent strong startling stimulus). As P50 reduction, PPI is also reduced in schizophrenic patients,
-although both do not seem to be convergent \cite{Braff2007}. Again, computational models exploring the mechanisms underlying PPI have been developed (for example \cite{Schmajuk2005,Ramirez2012,Leumann2001}, and Moxon et al.
+although these phenotypes do not seem to correlate \cite{Braff2007}. Again, computational models exploring the mechanisms underlying PPI have been developed (for example \cite{Schmajuk2005,Ramirez2012,Leumann2001}, and Moxon et al.
 have investigated the dopaminergic modulation of the P50 auditory-evoked potential and its relationship to sensory gating in schizophrenia \cite{Moxon2003}.
  
 The N100 (also called N1) is a negative component of the EEG signal occurring approximately 100\,ms after stimulus onset. This negative deflection is again reduced in schizophrenic patients 
 (reviewed in \cite{Rosburg2008,Rissling2010,Javitt2008}) and these deficits have also been modeled \cite{Ventouras2000}).
 
-Outside of the auditory system, working memory deficits are probably one of the most robust and best described cognitive deficits in schizophrenic patients (reviewed in \cite{Piskulic2007,Lee2005}). Patients
-show a decrease in working memory capacity, i.e. the capacity to retain information online for a relatively short period of time, across a broad range of paradigms.
+Although we here concentrated on biomarkers and deficits in the auditory cortex, our approach is well adaptable to brain circuits outside of the auditory system. 
+Working memory deficits are probably one of the most robust and best described cognitive deficits in schizophrenic patients (reviewed in \cite{Piskulic2007,Lee2005}). Patients
+show a decrease in working memory capacity, i.e. the capacity to maintain, manipulate and use information online for a relatively short period of time, across a broad range of paradigms.
 Again, several theoretical and computational models have been proposed, aiming to provide mechanistic descriptions of the underlying mechanisms (for example \cite{Compte2000,Durstewitz2000,Wang2004,Singh2006,Wang2001,Cano2012}). 
 
 All these deficits and alterations along with the mentioned computational models could be integrated into a module similar to the proposed ASSRUnit module.
+Such a unified framework would be of great benefit for the study of schizophrenia pathology due to the diversity of symptoms, biomarkers, and experimental observations linked to the mental disease.
 
 \section{Conclusion}
 We have proposed a framework for automated validation and comparison of computational models of neurophysiological and 
