@@ -44,7 +44,7 @@ class beemanGenesisModel(object):
 	'''
 
 	# put the execution string together
-	os.chdir('ACnet2_Genesis/')
+	os.chdir('../ACnet2_Genesis/')
 	execstring = ' genesis ACnet2-batch-new-standard.g ' + self.filename+ ' ' + str(stimfrequency)+ ' ' + str(self.random_seed)+ ' ' + str(self.ee_weight)+ ' ' + str(self.ie_weight)+ ' ' + str(self.ei_weight)+ ' ' + str(self.ii_weight)+ ' ' + str(self.bg_weight)+ ' ' + str(self.edrive_weight)+ ' ' + str(self.idrive_weight)+ ' ' + str(self.bg_noise_frequency)
 	
 	# execute the simulation
