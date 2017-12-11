@@ -1,6 +1,5 @@
 import sciunit
 
-# The type of score the test should return (probably have to change that to zscore or ratioscore)
 from sciunit.scores import BooleanScore,RatioScore # Two of several SciUnit score types.  
 from capabilities import ProduceXY
 

@@ -2,19 +2,12 @@ import sciunit
 
 from capabilities import ProduceXY
 
-
-import math,sys,os
-import random
-import numpy as np
-
-import matplotlib.pylab as plt
-
-
-
 from Modules.Vierling import simpleModel
 from Modules.Genesis import beemanGenesisModel
 from Modules.NML2 import beemanNML2Model
 
+
+import numpy as np
 ### The model classes ###
 
 
