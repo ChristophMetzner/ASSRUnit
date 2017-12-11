@@ -61,14 +61,14 @@ class beemanNML2Model(object):
     def createModel(self):
         
 	# File names of all components
-	pyr_file_name = "ACnet2_NML2/Cells/pyr_4_sym.cell.nml"
-	bask_file_name = "ACnet2_NML2/Cells/bask.cell.nml"
+	pyr_file_name = "../ACnet2_NML2/Cells/pyr_4_sym.cell.nml"
+	bask_file_name = "../ACnet2_NML2/Cells/bask.cell.nml"
 
-	exc_exc_syn_names = 'ACnet2_NML2/Synapses/AMPA_syn.synapse.nml'
-	exc_inh_syn_names = 'ACnet2_NML2/Synapses/AMPA_syn_inh.synapse.nml'
-	inh_exc_syn_names = 'ACnet2_NML2/Synapses/GABA_syn.synapse.nml'
-	inh_inh_syn_names = 'ACnet2_NML2/Synapses/GABA_syn_inh.synapse.nml'
-	bg_exc_syn_names = 'ACnet2_NML2/Synapses/bg_AMPA_syn.synapse.nml'
+	exc_exc_syn_names = '../ACnet2_NML2/Synapses/AMPA_syn.synapse.nml'
+	exc_inh_syn_names = '../ACnet2_NML2/Synapses/AMPA_syn_inh.synapse.nml'
+	inh_exc_syn_names = '../ACnet2_NML2/Synapses/GABA_syn.synapse.nml'
+	inh_inh_syn_names = '../ACnet2_NML2/Synapses/GABA_syn_inh.synapse.nml'
+	bg_exc_syn_names = '../ACnet2_NML2/Synapses/bg_AMPA_syn.synapse.nml'
 
 	nml_doc = NeuroMLDocument(id=self.filename+'_doc')
 	net = Network(id=self.filename+'_net')
@@ -363,7 +363,7 @@ class beemanNML2Model(object):
 	#######   Write to file  ######    
 
 	print("Saving to file...")
-	nml_file = self.filename+'_doc'+'.net.nml'
+	nml_file = '../ACnet2_NML2/'+self.filename+'_doc'+'.net.nml'
 	writers.NeuroMLWriter.write(nml_doc, nml_file)
 
 	print("Written network file to: "+nml_file)
@@ -382,7 +382,7 @@ class beemanNML2Model(object):
 	# Output membrane potential
 	# Ex population
 	Ex_potentials = 'V_Ex'
-	ls.create_output_file(Ex_potentials, "ACnet2_NML2/Results/v_exc.dat")
+	ls.create_output_file(Ex_potentials, "../ACnet2_NML2/Results/v_exc.dat")
 	for j in range(numCells_ex):
 		quantity = "%s[%i]/v"%(exc_pop.id, j)
 		v = 'v'+str(j)
@@ -390,7 +390,7 @@ class beemanNML2Model(object):
 
 	# Inh population
 	#Inh_potentials = 'V_Inh'
-	#ls.create_output_file(Inh_potentials, "ACnet2_NML2/Results/v_inh.dat")
+	#ls.create_output_file(Inh_potentials, "../ACnet2_NML2/Results/v_inh.dat")
 	#for j in range(numCells_inh):
 	#	quantity = "%s[%i]/v"%(inh_pop.id, j)
 	#	v = 'v'+str(j)
@@ -402,19 +402,17 @@ class beemanNML2Model(object):
 	ls.include_neuroml2_file(nml_file)
 
 	# Save to LEMS XML file
-	lems_file_name = ls.save_to_file()
+	lems_file_name = ls.save_to_file(file_name='../ACnet2_NML2/LEMS_'+self.filename+'.xml')
 
     def singleRun(self):
 
 
-	nml_file     = self.filename+'_doc'+'.net.nml'
-	lems_file    = 'LEMS_'+self.filename+'.xml'
+	nml_file     = '../ACnet2_NML2/'+self.filename+'_doc'+'.net.nml'
+	lems_file    = '../ACnet2_NML2/'+'LEMS_'+self.filename+'.xml'
 	target	     = self.filename+'_net'
 	simulator    = 'jNeuroML_NEURON'
-	generate_dir = '.'
-	# simulation parameters
-   	#nogui = '-nogui' in sys.arg
-	# model parameters in correct format, remains empty 
+	generate_dir = '../ACnet2_NML2'
+
 	sim_vars = {}
 	# set up Controller
 	cont = Controller(self.filename,nml_file,lems_file,target,self.sim_time,self.dt,simulator,generate_dir = generate_dir)
@@ -427,7 +425,7 @@ class beemanNML2Model(object):
 	print '\n\n\n'
 
     def analyse(self,powerfrequency):
-	data = np.genfromtxt('ACnet2_NML2/Results/v_exc.dat', dtype=np.float)
+	data = np.genfromtxt('../ACnet2_NML2/Results/v_exc.dat', dtype=np.float)
 	
 	avg_data = np.mean(data,axis=1)
 

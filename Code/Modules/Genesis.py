@@ -56,12 +56,6 @@ class beemanGenesisModel(object):
 	pxx,freqs = self._calculatePSD(datafile)
 	os.chdir('../Notebooks/')
 
-	fig = plt.figure()
-	ax = fig.add_subplot(111)
-	pxx[0] = 0.0
-	ax.plot(1000*freqs,pxx)
-    	ax.axis(xmin = 0, xmax = 100)
-	plt.savefig(self.filename+'-PSD.png')
 	
 	# extract power at the frequency band of interest
 
