@@ -1,10 +1,10 @@
 import sciunit
 
 from sciunit.scores import RatioScore # One of several SciUnit score types.  
-from capabilities2 import ProduceXY
+from capabilities import ProduceXY
 
-from models2 import VierlingSimpleModel
-from tests2 import PredictionTest1010
+from models import VierlingSimpleModel
+from tests import PredictionTest1010
 from prediction import addPrediction
 
 

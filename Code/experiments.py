@@ -57,7 +57,7 @@ def saveObj(obj, name ):
 		pickle.dump(obj, f, protocol=2)
 
 
-saveObj(database,'ASSR_schizophrenia_experimental_database')
+saveObj(database,'Databases/ASSR_schizophrenia_experimental_database')
 
 
 

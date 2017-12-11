@@ -1,6 +1,6 @@
 import sciunit
 
-from capabilities2 import ProduceXY
+from capabilities import ProduceXY
 
 
 import math,sys,os

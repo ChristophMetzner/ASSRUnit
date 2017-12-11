@@ -16,7 +16,7 @@ def boxplot(data,labels):
 	plt.boxplot(data,labels=labels,showmeans=True)
 	#plt.show()
 
-def experimental_overview(studies=[],observations=[],entrytype='Full_qual',meta=False,dbname='ASSR_schizophrenia_experimental_database',plotting=True):
+def experimental_overview(studies=[],observations=[],entrytype='Full_qual',meta=False,dbname='Databases/ASSR_schizophrenia_experimental_database',plotting=True):
 	'''Gives an overview of the experimental observations in the database.
 	   Should make possible to query for specific studies, observation types
 	   and meta-data.
@@ -301,7 +301,7 @@ def _load_obj(name ):
 	with open(name + '.pkl', 'rb') as f:
 		return pickle.load(f)
 
-def get_studies(dbname='ASSR_schizophrenia_experimental_database'):
+def get_studies(dbname='Databases/ASSR_schizophrenia_experimental_database'):
 	'''Gives a list of all study identifiers in the database.
 
  	Parameters
@@ -319,7 +319,7 @@ def get_studies(dbname='ASSR_schizophrenia_experimental_database'):
 
 	return studies
 
-def get_observations(entrytype='Full',dbname='ASSR_schizophrenia_experimental_database'):
+def get_observations(entrytype='Full',dbname='Databases/ASSR_schizophrenia_experimental_database'):
 	'''Gives a list of all observation identifiers in the database.
 
  	Parameters
@@ -343,22 +343,4 @@ def get_observations(entrytype='Full',dbname='ASSR_schizophrenia_experimental_da
 				observations = list(set(observations + [ob+' :'+des])) # this creates a list of unique(!) observations
 	return observations
 
-if __name__ == "__main__":
-
-	# test _plot_table
-	#cellText  = np.random.random((3,2))
-	#rowLabels = ["row 1","row 2","row 3 "]
-	#colLabels = ["col 1","col 2"]
-	#_plot_table(cellText,rowLabels,colLabels)
-
-	# test experimental_overview
-	studies =  []#,['Kwon_1999','Krishnan_2009']
-	observations =   ['4040','3030','2020','2040','4020']
-	a,b,c=experimental_overview(studies=studies,observations=observations,entrytype='Full_qual',meta=True)
-	plt.savefig('test.eps',dpi=300)
-	plt.show()
-	#s=get_studies()
-	#o=get_observations()
-	#print s
-	#print o
 	
