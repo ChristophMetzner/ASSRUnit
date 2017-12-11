@@ -29,15 +29,20 @@ import lems.api as lems
 
 import neuroml.writers as writers
 
+import matplotlib.mlab as mlab
+import matplotlib.pyplot as plt
 
-from Controller import Controller
+from ACnet2_NML2.Controller import Controller
+from ACnet2_NML2.CreateACnet2Array_Function import add_connection
 from collections import OrderedDict
+
+
 
 class beemanNML2Model(object):
     '''
 
     '''
-    def __init__(self,params):
+    def __init__(self,params,drive_period):
 	# extract the model parameters from the params dictionary
 	self.filename		= params['Filename']
 	self.random_seed    	= params['Random Seed']
@@ -45,24 +50,28 @@ class beemanNML2Model(object):
 	self.ie_weight		= params['I-E Weight']	
 	self.ei_weight		= params['E-I Weight']	
 	self.ii_weight		= params['I-I Weight']	
+	self.Edrive_weight	= params['E-Drive Weight']	
+	self.Idrive_weight	= params['I-Drive Weight']	
 	self.bg_weight		= params['Background Noise Weight']		
-	self.bg_noise_period	= params['Background Noise Period']
+	self.bg_noise_frequency	= params['Background Noise Frequency']
 	self.sim_time           = params['Simulation Time']
 	self.dt                 = params['Time Step']
+	self.Drive_period	= drive_period
 
-    def createModel(network_id,nml_doc):
+    def createModel(self):
         
 	# File names of all components
-	pyr_file_name = "../ACnet2-NML2/Cells/pyr_4_sym.cell.nml"
-	bask_file_name = "../ACnet2-NML2/Cells/bask.cell.nml"
+	pyr_file_name = "ACnet2_NML2/Cells/pyr_4_sym.cell.nml"
+	bask_file_name = "ACnet2_NML2/Cells/bask.cell.nml"
 
-	exc_exc_syn_names = '../ACnet2-NML2/Synapses/AMPA_syn.synapse.nml'
-	exc_inh_syn_names = '../ACnet2-NML2/Synapses/AMPA_syn_inh.synapse.nml'
-	inh_exc_syn_names = '../ACnet2-NML2/Synapses/GABA_syn.synapse.nml'
-	inh_inh_syn_names = '../ACnet2-NML2/Synapses/GABA_syn_inh.synapse.nml'
-	bg_exc_syn_names = '../ACnet2-NML2/Synapses/bg_AMPA_syn.synapse.nml'
+	exc_exc_syn_names = 'ACnet2_NML2/Synapses/AMPA_syn.synapse.nml'
+	exc_inh_syn_names = 'ACnet2_NML2/Synapses/AMPA_syn_inh.synapse.nml'
+	inh_exc_syn_names = 'ACnet2_NML2/Synapses/GABA_syn.synapse.nml'
+	inh_inh_syn_names = 'ACnet2_NML2/Synapses/GABA_syn_inh.synapse.nml'
+	bg_exc_syn_names = 'ACnet2_NML2/Synapses/bg_AMPA_syn.synapse.nml'
 
-	net = Network(id=network_id)
+	nml_doc = NeuroMLDocument(id=self.filename+'_doc')
+	net = Network(id=self.filename+'_net')
 	nml_doc.networks.append(net)
 
 	nml_doc.includes.append(IncludeType(pyr_file_name))
@@ -73,8 +82,10 @@ class beemanNML2Model(object):
 	nml_doc.includes.append(IncludeType(inh_inh_syn_names))
 	nml_doc.includes.append(IncludeType(bg_exc_syn_names))
 
+
+
 	# Create a LEMSSimulation to manage creation of LEMS file
-	ls = LEMSSimulation("sim_full", self.sim_time, self.dt)
+	ls = LEMSSimulation(self.filename, self.sim_time, self.dt)
 
 	# Point to network as target of simulation
 	ls.assign_simulation_target(net.id)
@@ -310,12 +321,14 @@ class beemanNML2Model(object):
 
 	#######   Create Input   ######
 	# Create a sine generator
-	sg = SineGenerator(id="sineGen_0",phase="0",delay="0ms",duration=self.sim_time,amplitude=self.bg_weight,period=self.bg_noise_period)
+	sgE = SineGenerator(id="sineGen_0",phase="0",delay="0ms",duration=str(self.sim_time)+"ms",amplitude=str(self.Edrive_weight)+"nA",period=str(self.Drive_period)+"ms")
+	sgI = SineGenerator(id="sineGen_1",phase="0",delay="0ms",duration=str(self.sim_time)+"ms",amplitude=str(self.Idrive_weight)+"nA",period=str(self.Drive_period)+"ms")
 
-	nml_doc.sine_generators.append(sg)
+	nml_doc.sine_generators.append(sgE)
+	nml_doc.sine_generators.append(sgI)
 	# Create an input object for each excitatory cell
 	for i in range(0,XSCALE_ex): 
-		exp_input = ExplicitInput(target="%s[%i]"%(exc_pop.id,i),input=sg.id)
+		exp_input = ExplicitInput(target="%s[%i]"%(exc_pop.id,i),input=sgE.id)
 		net.explicit_inputs.append(exp_input)
 
 	# Create an input object for a percentage of inhibitory cells
@@ -323,18 +336,18 @@ class beemanNML2Model(object):
 	for i in range(0,XSCALE_inh): 
 		ran =  random.random()
 		if 0 < ran <= input_probability:
-			inh_input = ExplicitInput(target="%s[%i]"%(inh_pop.id,i),input=sg.id)
+			inh_input = ExplicitInput(target="%s[%i]"%(inh_pop.id,i),input=sgI.id)
 			net.explicit_inputs.append(inh_input)
 
 	# Define Poisson noise input
 
-	print 'Generate background noise elements'
+
 	# Ex
-	print 'Ex'
-	nml_doc.includes.append(IncludeType('Synapses/bg_AMPA_syn.synapse.nml'))
+
+	#nml_doc.includes.append(IncludeType('Synapses/bg_AMPA_syn.synapse.nml'))
 
 	pfs1 = PoissonFiringSynapse(id="poissonFiringSyn1",
-		                           average_rate=bg_noise_frequency,
+		                           average_rate=str(self.bg_noise_frequency)+"Hz",
 		                           synapse=bg_exc_syn, 
 		                           spike_target="./%s"%bg_exc_syn)
 	nml_doc.poisson_firing_synapses.append(pfs1)
@@ -350,7 +363,7 @@ class beemanNML2Model(object):
 	#######   Write to file  ######    
 
 	print("Saving to file...")
-	nml_file = network_id+'.net.nml'
+	nml_file = self.filename+'_doc'+'.net.nml'
 	writers.NeuroMLWriter.write(nml_doc, nml_file)
 
 	print("Written network file to: "+nml_file)
@@ -369,19 +382,19 @@ class beemanNML2Model(object):
 	# Output membrane potential
 	# Ex population
 	Ex_potentials = 'V_Ex'
-	ls.create_output_file(Ex_potentials, "../ACnet2-NML2/Results/v_exc.dat")
+	ls.create_output_file(Ex_potentials, "ACnet2_NML2/Results/v_exc.dat")
 	for j in range(numCells_ex):
 		quantity = "%s[%i]/v"%(exc_pop.id, j)
 		v = 'v'+str(j)
 		ls.add_column_to_output_file(Ex_potentials,v, quantity)
 
 	# Inh population
-	Inh_potentials = 'V_Inh'
-	ls.create_output_file(Inh_potentials, "../ACnet2-NML2/Results/v_inh.dat")
-	for j in range(numCells_inh):
-		quantity = "%s[%i]/v"%(inh_pop.id, j)
-		v = 'v'+str(j)
-		ls.add_column_to_output_file(Inh_potentials,v, quantity)
+	#Inh_potentials = 'V_Inh'
+	#ls.create_output_file(Inh_potentials, "ACnet2_NML2/Results/v_inh.dat")
+	#for j in range(numCells_inh):
+	#	quantity = "%s[%i]/v"%(inh_pop.id, j)
+	#	v = 'v'+str(j)
+	#	ls.add_column_to_output_file(Inh_potentials,v, quantity)
 
 
 
@@ -391,21 +404,43 @@ class beemanNML2Model(object):
 	# Save to LEMS XML file
 	lems_file_name = ls.save_to_file()
 
-    def singleRun(params,name,nml_file,lems_file,target,simulator,generate_dir):
+    def singleRun(self):
+
+
+	nml_file     = self.filename+'_doc'+'.net.nml'
+	lems_file    = 'LEMS_'+self.filename+'.xml'
+	target	     = self.filename+'_net'
+	simulator    = 'jNeuroML_NEURON'
+	generate_dir = '.'
 	# simulation parameters
-   	nogui = '-nogui' in sys.arg
-	# model parameters in correct format
-	parameters = {	'synapse:AMPA_syn/gbase/nS': params[0],
-			'synapse:AMPA_syn_inh/gbase/nS': params[1],
-			'synapse:GABA_syn/gbase/nS': params[2],
-			'synapse:GABA_syn_inh/gbase/nS': params[3]}
+   	#nogui = '-nogui' in sys.arg
+	# model parameters in correct format, remains empty 
+	sim_vars = {}
 	# set up Controller
-	cont = Controller(name,nml_file,lems_file,target,self.sim_time,self.dt,simulator,generate_dir = generate_dir)
+	cont = Controller(self.filename,nml_file,lems_file,target,self.sim_time,self.dt,simulator,generate_dir = generate_dir)
 
-	sim_vars = OrderedDict(parameters)
-	
-	cont.run_individual(sim_vars,show=(not nogui))
 
-    def analyse():
 	
+	cont.run_individual(sim_vars,show=False)
+	print '\n\n\n'
+	print("Have run individual instance...")
+	print '\n\n\n'
+
+    def analyse(self,powerfrequency):
+	data = np.genfromtxt('ACnet2_NML2/Results/v_exc.dat', dtype=np.float)
+	
+	avg_data = np.mean(data,axis=1)
+
+	nfft = len(avg_data)
+	fs   = 1./self.dt
+	pxx,freqs=mlab.psd(avg_data,NFFT=nfft,Fs=fs,noverlap=0,window=mlab.window_none)
+	pxx[0] = 0.0
+	freqs = freqs*1000 # adjusting for ms timescale
+	step_size = freqs[1]-freqs[0]
+	lbound = np.floor(powerfrequency/step_size)
+	ubound = np.ceil(powerfrequency/step_size)
+	
+	power = np.sum(pxx[lbound:ubound])
+
+	return power
 
