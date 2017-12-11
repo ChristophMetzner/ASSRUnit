@@ -52,7 +52,7 @@ class beemanGenesisModel(object):
 
 
 	# load and analyse the data
-	datafile = 'EPSC_sum_' + self.filename + '.txt'
+	datafile = 'Results/EPSC_sum_' + self.filename + '.txt'
 	pxx,freqs = self._calculatePSD(datafile)
 	os.chdir('../')
 
