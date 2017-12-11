@@ -13,7 +13,7 @@ import matplotlib.pylab as plt
 
 from Modules.Vierling import simpleModel
 from Modules.Genesis import beemanGenesisModel
-#from Modules.NML2 import beemanNML2Model
+from Modules.NML2 import beemanNML2Model
 
 ### The model classes ###
 
@@ -211,23 +211,24 @@ class BeemanNML2Model(sciunit.Model, ProduceXY):
 	 Simulates Y Hz drive to the control and the schizophrenia-like network for all random seeds, calculates a Fourier transform of the simulated MEG 
 	 and extracts the power in the X Hz frequency band for each simulation. Returns the mean power for the control and the schizophrenia-like network, respectively.
 	'''
+	drive_period = (1.0/stimfrequency)*1000 # calculate drive period (in ms) from stimulation frequency
 	# generate the control network and run simulation
 	print 'Generating control model'
-	ctrl_model = beemanNML2Model(self.controlparams)
+	ctrl_model = beemanNML2Model(self.controlparams,drive_period)
 	ctrl_model.createModel()
 	print 'Running control model'
 	ctrl_model.singleRun()
 	print 'Analysing control model'
-	controlXY = ctrl_model.analyse()
+	controlXY = ctrl_model.analyse(powerfrequency)
 	
 	# generate the schizophrenia-like network and run simulation
 	print 'Generating schizophrenia model'
-	schiz_model = beemanNML2Model(self.schizparams)
+	schiz_model = beemanNML2Model(self.schizparams,drive_period)
 	schiz_model.createModel()
 	print 'Running control model'
 	schiz_model.singleRun()
 	print 'Analysing control model'
-	schizXY = schiz_model.analyse()
+	schizXY = schiz_model.analyse(powerfrequency)
 
 
         return [controlXY,schizXY]
