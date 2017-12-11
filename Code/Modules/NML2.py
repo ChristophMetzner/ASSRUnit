@@ -33,7 +33,7 @@ import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
 
 from ACnet2_NML2.Controller import Controller
-from ACnet2_NML2.CreateACnet2Array_Function import add_connection
+from ACnet2_NML2.helpingFunctions import add_connection
 from collections import OrderedDict
 
 
