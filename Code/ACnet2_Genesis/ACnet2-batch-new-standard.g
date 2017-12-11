@@ -89,11 +89,11 @@ str Inh_drive_synpath = "dend/AMPA_bask_drive"  // drive -> bask dendrite
 
 // Label to appear on the graph
 str graphlabel = "Vm of row center cell"
-str net_efile = "Results/Ex_netview"  // filename prefix for Ex_netview data
-str net_ifile = "Results/Inh_netview" // filename prefix for Inh_netview data
-str net_EPSC_file = "Results/EPSC_netview" // filename prefix for Ex_ex_synpath Ik (EPSCs)
-str EPSC_sum_file = "Results/EPSC_sum" // filename prefix for summed Ex_ex_synpath Ik
-str sum_file = "Results/run_summary"    // text file prefix for summary of run params
+str net_efile = "Ex_netview"  // filename prefix for Ex_netview data
+str net_ifile = "Inh_netview" // filename prefix for Inh_netview data
+str net_EPSC_file = "EPSC_netview" // filename prefix for Ex_ex_synpath Ik (EPSCs)
+str EPSC_sum_file = "EPSC_sum" // filename prefix for summed Ex_ex_synpath Ik
+str sum_file = "run_summary"    // text file prefix for summary of run params
 
 str data_source = "/EPSCsummer" // data_source sums Ex_cell ex currents
 

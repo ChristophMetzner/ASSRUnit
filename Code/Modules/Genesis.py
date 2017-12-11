@@ -46,15 +46,15 @@ class beemanGenesisModel(object):
 	# put the execution string together
 	os.chdir('../ACnet2_Genesis/')
 	execstring = ' genesis ACnet2-batch-new-standard.g ' + self.filename+ ' ' + str(stimfrequency)+ ' ' + str(self.random_seed)+ ' ' + str(self.ee_weight)+ ' ' + str(self.ie_weight)+ ' ' + str(self.ei_weight)+ ' ' + str(self.ii_weight)+ ' ' + str(self.bg_weight)+ ' ' + str(self.edrive_weight)+ ' ' + str(self.idrive_weight)+ ' ' + str(self.bg_noise_frequency)
-	
+	print 'running simulation'
 	# execute the simulation
 	self._runProcess(execstring)
-
+	print 'finished simulation'
 
 	# load and analyse the data
-	datafile = 'Results/EPSC_sum_' + self.filename + '.txt'
+	datafile = 'EPSC_sum_' + self.filename + '.txt'
 	pxx,freqs = self._calculatePSD(datafile)
-	os.chdir('../')
+	os.chdir('../Notebooks/')
 
 	fig = plt.figure()
 	ax = fig.add_subplot(111)
