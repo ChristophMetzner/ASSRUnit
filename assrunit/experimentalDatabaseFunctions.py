@@ -18,13 +18,13 @@ def addObservation(measurenames_full,measures_full,measurenames_qual,measures_qu
 	# two different versions (quantitative and qualitative!)
 	data_full = {}
 	for i,m in enumerate(measures_full):
-		data_full = data_full.update({measuresnames_full[i]}: measures[i])
+		data_full = data_full.update({measuresnames_full[i]: measures[i]})
 	name_full = name + '_full'
 	entry_full = {'Data': data_full, 'Meta':meta['Full']}
 	
 	data_qual = {}
 	for i,m in enumerate(measures_qual):
-		data_qual = data_qual.update({measuresnames_qual[i]}: measures[i])
+		data_qual = data_qual.update({measuresnames_qual[i]: measures[i]})
 	name_qual = name + '_qual'
 	entry_qual = {'Data': data_qual, 'Meta':meta['Qual']}
 
