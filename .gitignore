@@ -1,0 +1,12 @@
+.ipynb_checkpoints
+*~
+*.pyc
+x86_64
+*.mod
+*.dat
+*.hoc
+*nrn.py
+*.xml
+*net.nml
+*.txt
+build
