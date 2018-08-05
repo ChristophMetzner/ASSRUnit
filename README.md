@@ -8,7 +8,7 @@ ASSRUnit is a module that integrates databases of experimental studies on ASSR d
 + to generate predictions from a computational model and to create prediction databases
 + add new database entries, databases, tests, models, predictions and prediction databases
 
-For more information see this [article](). For examples that illustrate how to use ASSRUnit see [here](https://github.com/ChristophMetzner/ASSRUnit/tree/master/Code/Notebooks).
+For more information see this [article](https://www.mitpressjournals.org/doi/full/10.1162/cpsy_a_00015). For examples that illustrate how to use ASSRUnit see [here](https://github.com/ChristophMetzner/ASSRUnit/tree/CompPsychArticle/assrunit/Notebooks).
 
 ## Dependencies
 In order to use ASSRUnit you need the following packages:
