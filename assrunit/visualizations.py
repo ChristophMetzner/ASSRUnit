@@ -16,7 +16,7 @@ def boxplot(data,labels):
 	plt.boxplot(data,labels=labels,showmeans=True)
 	#plt.show()
 
-def experimental_overview(studies=[],observations=[],entrytype='Full_qual',meta=False,dbname='Databases/ASSR_schizophrenia_experimental_database',plotting=True):
+def experimental_overview(studies=[],observations=[],  entrytype='Full',meta=False  ,dbname='Databases/ASSR_schizophrenia_experimental_database',plotting=True):
 	'''Gives an overview of the experimental observations in the database.
 	   Should make possible to query for specific studies, observation types
 	   and meta-data.
@@ -31,8 +31,9 @@ def experimental_overview(studies=[],observations=[],entrytype='Full_qual',meta=
 	# load database
 	
 	database = _load_obj(dbname)
-
+  
 	rowLabels = []
+    
 	if entrytype == 'Full':
 		if not studies: # full overview!
 			if not observations: # full overview!
@@ -63,12 +64,16 @@ def experimental_overview(studies=[],observations=[],entrytype='Full_qual',meta=
 								string = string + str(groups[t]) + ' : ' + str(vals[t]) + ' '
 							values[j][i] = string
 					if meta:
-						print k
-						pp = pprint.PrettyPrinter(indent=4)
-						pp.pprint(database[k][entrytype]['Meta'])
+						if meta==True:
+							print k
+							pp = pprint.PrettyPrinter(indent=4)
+							pp.pprint(database[k][entrytype]['Meta'])  
+						else:
+							print k
+							pp = pprint.PrettyPrinter(indent=4)
+							pp.pprint(database[k][entrytype]['Meta'][meta])
 				if plotting:		
 					_plot_table(values,rowLabels,colLabels)
-						
 
 
 			else:                # only display specific observations
@@ -162,7 +167,7 @@ def experimental_overview(studies=[],observations=[],entrytype='Full_qual',meta=
 				if plotting:		
 					_plot_table(values,rowLabels,colLabels)
 
-	else:
+	else :
 		if not studies: # full overview!
 			if not observations: # full overview!
 				# go through all studies and all observations
@@ -186,12 +191,17 @@ def experimental_overview(studies=[],observations=[],entrytype='Full_qual',meta=
 							key = 'value'
 							values[j][i] = database[k][entrytype][o][key]	
 					if meta:
-						print k
-						pp = pprint.PrettyPrinter(indent=4)
-						pp.pprint(database[k][entrytype]['Meta'])
+						if meta==True:
+							print k
+							pp = pprint.PrettyPrinter(indent=4)
+							pp.pprint(database[k][entrytype]['Meta'])
+						else:
+							print k
+							pp = pprint.PrettyPrinter(indent=4)
+							pp.pprint(database[k][entrytype]['Meta'][meta])
 				if plotting:		
 					_plot_table(values,rowLabels,colLabels)
-						
+
 			else:                # only display specific observations
 				# go through all studies 
 				keys      = database.keys()
@@ -264,6 +274,8 @@ def experimental_overview(studies=[],observations=[],entrytype='Full_qual',meta=
 						pp.pprint(database[k][entrytype]['Meta'])
 				if plotting:		
 					_plot_table(values,rowLabels,colLabels)
+                  
+                   
 	return values,rowLabels,colLabels
 		
 def plot_statistics(stats,rowLables,colLabels):
@@ -343,4 +355,30 @@ def get_observations(entrytype='Full',dbname='Databases/ASSR_schizophrenia_exper
 				observations = list(set(observations + [ob+' :'+des])) # this creates a list of unique(!) observations
 	return observations
 
+
+
+def get_meta(item,dbname='Databases/ASSR_schizophrenia_experimental_database'):      
+	'''Gives a list of all study identifiers in the database.
+ 	Parameters
+	-----------------
 	
+	Returns
+	-----------------
+	'''
+	'''
+	# load database
+	database = _load_obj(dbname)
+	keys = database.keys()
+	itema = []
+	for k in keys:
+		trele = database[k][entrytype].keys()
+		mes=database[k][entrytype][trele]['Meta['+item+']']
+		itema = list(set([trele +' :'+mes])) # this creates a list of unique(!) '''
+        
+
+                
+	return item
+
+
+
+        
