@@ -16,7 +16,7 @@ def boxplot(data,labels):
 	plt.boxplot(data,labels=labels,showmeans=True)
 	#plt.show()
 
-def experimental_overview(studies=[],observations=[],  entrytype='Full',meta=False  ,dbname='Databases/ASSR_schizophrenia_experimental_database',plotting=True):
+def experimental_overview(studies=[],observations=[],  entrytype='Full_qual',meta=False  ,dbname='Databases/ASSR_schizophrenia_experimental_database',plotting=True):
 	'''Gives an overview of the experimental observations in the database.
 	   Should make possible to query for specific studies, observation types
 	   and meta-data.
@@ -64,14 +64,9 @@ def experimental_overview(studies=[],observations=[],  entrytype='Full',meta=Fal
 								string = string + str(groups[t]) + ' : ' + str(vals[t]) + ' '
 							values[j][i] = string
 					if meta:
-						if meta==True:
-							print k
-							pp = pprint.PrettyPrinter(indent=4)
-							pp.pprint(database[k][entrytype]['Meta'])  
-						else:
-							print k
-							pp = pprint.PrettyPrinter(indent=4)
-							pp.pprint(database[k][entrytype]['Meta'][meta])
+						print k
+						pp = pprint.PrettyPrinter(indent=4)
+						pp.pprint(database[k][entrytype]['Meta'])
 				if plotting:		
 					_plot_table(values,rowLabels,colLabels)
 
@@ -191,14 +186,9 @@ def experimental_overview(studies=[],observations=[],  entrytype='Full',meta=Fal
 							key = 'value'
 							values[j][i] = database[k][entrytype][o][key]	
 					if meta:
-						if meta==True:
-							print k
-							pp = pprint.PrettyPrinter(indent=4)
-							pp.pprint(database[k][entrytype]['Meta'])
-						else:
-							print k
-							pp = pprint.PrettyPrinter(indent=4)
-							pp.pprint(database[k][entrytype]['Meta'][meta])
+						print k
+						pp = pprint.PrettyPrinter(indent=4)
+						pp.pprint(database[k][entrytype]['Meta'])
 				if plotting:		
 					_plot_table(values,rowLabels,colLabels)
 
@@ -357,7 +347,7 @@ def get_observations(entrytype='Full',dbname='Databases/ASSR_schizophrenia_exper
 
 
 
-def get_meta(item,dbname='Databases/ASSR_schizophrenia_experimental_database'):      
+def get_meta(item,entrytype='Full_qual',dbname='Databases/ASSR_schizophrenia_experimental_database'):      
 	'''Gives a list of all study identifiers in the database.
  	Parameters
 	-----------------
@@ -365,20 +355,18 @@ def get_meta(item,dbname='Databases/ASSR_schizophrenia_experimental_database'):
 	Returns
 	-----------------
 	'''
-	'''
+	
 	# load database
 	database = _load_obj(dbname)
 	keys = database.keys()
 	itema = []
 	for k in keys:
-		trele = database[k][entrytype].keys()
-		mes=database[k][entrytype][trele]['Meta['+item+']']
-		itema = list(set([trele +' :'+mes])) # this creates a list of unique(!) '''
+		mes=database[k][entrytype]['Meta'][item]
+		print mes
+		itema = list(set(itema + [k +' :'+mes])) # this creates a list of unique(!) 
         
 
                 
-	return item
+	return itema
 
 
-
-        
