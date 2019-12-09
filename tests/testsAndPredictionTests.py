@@ -4,7 +4,7 @@ from sciunit.scores import (
     BooleanScore,
     RatioScore,
 )  # Two of several SciUnit score types.
-from capabilities import ProduceXY
+from assrunit.capabilities import ProduceXY
 
 
 ### The test classes ###
