@@ -75,7 +75,7 @@ class beemanGenesisModel(object):
         # load and analyse the data
         datafile = "EPSC_sum_" + self.filename + ".txt"
         pxx, freqs = self._calculatePSD(datafile)
-        os.chdir("../Notebooks/")
+        os.chdir("../notebooks/")
 
         # extract power at the frequency band of interest
 
