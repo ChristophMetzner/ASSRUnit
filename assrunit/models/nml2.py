@@ -61,14 +61,14 @@ class beemanNML2Model(object):
     def createModel(self):
 
         # File names of all components
-        pyr_file_name = "../acnet2_nml2/cells/pyr_4_sym.cell.nml"
-        bask_file_name = "../acnet2_nml2/cells/bask.cell.nml"
+        pyr_file_name = "../acnet2_nml2/cells/pyr_4_sym.cell.acnet2_nml2"
+        bask_file_name = "../acnet2_nml2/cells/bask.cell.acnet2_nml2"
 
-        exc_exc_syn_names = "../acnet2_nml2/synapses/AMPA_syn.synapse.nml"
-        exc_inh_syn_names = "../acnet2_nml2/synapses/AMPA_syn_inh.synapse.nml"
-        inh_exc_syn_names = "../acnet2_nml2/synapses/GABA_syn.synapse.nml"
-        inh_inh_syn_names = "../acnet2_nml2/synapses/GABA_syn_inh.synapse.nml"
-        bg_exc_syn_names = "../acnet2_nml2/synapses/bg_AMPA_syn.synapse.nml"
+        exc_exc_syn_names = "../acnet2_nml2/synapses/AMPA_syn.synapse.acnet2_nml2"
+        exc_inh_syn_names = "../acnet2_nml2/synapses/AMPA_syn_inh.synapse.acnet2_nml2"
+        inh_exc_syn_names = "../acnet2_nml2/synapses/GABA_syn.synapse.acnet2_nml2"
+        inh_inh_syn_names = "../acnet2_nml2/synapses/GABA_syn_inh.synapse.acnet2_nml2"
+        bg_exc_syn_names = "../acnet2_nml2/synapses/bg_AMPA_syn.synapse.acnet2_nml2"
 
         nml_doc = NeuroMLDocument(id=self.filename + "_doc")
         net = Network(id=self.filename + "_net")
@@ -438,7 +438,7 @@ class beemanNML2Model(object):
 
         # Ex
 
-        # nml_doc.includes.append(IncludeType('synapses/bg_AMPA_syn.synapse.nml'))
+        # nml_doc.includes.append(IncludeType('synapses/bg_AMPA_syn.synapse.acnet2_nml2'))
 
         pfs1 = PoissonFiringSynapse(
             id="poissonFiringSyn1",
@@ -465,7 +465,7 @@ class beemanNML2Model(object):
         #######   Write to file  ######
 
         print ("Saving to file...")
-        nml_file = "../acnet2_nml2/" + self.filename + "_doc" + ".net.nml"
+        nml_file = "../acnet2_nml2/" + self.filename + "_doc" + ".net.acnet2_nml2"
         writers.NeuroMLWriter.write(nml_doc, nml_file)
 
         print ("Written network file to: " + nml_file)
@@ -506,7 +506,7 @@ class beemanNML2Model(object):
 
     def singleRun(self):
 
-        nml_file = "../acnet2_nml2/" + self.filename + "_doc" + ".net.nml"
+        nml_file = "../acnet2_nml2/" + self.filename + "_doc" + ".net.acnet2_nml2"
         lems_file = "../acnet2_nml2/" + "LEMS_" + self.filename + ".xml"
         target = self.filename + "_net"
         simulator = "jNeuroML_NEURON"

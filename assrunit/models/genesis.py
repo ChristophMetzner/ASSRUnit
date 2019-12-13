@@ -42,7 +42,7 @@ class beemanGenesisModel(object):
 	"""
 
         # put the execution string together
-        os.chdir("../ACnet2_Genesis/")
+        os.chdir("../acnet2_genesis/")
         execstring = (
             " genesis ACnet2-batch-new-standard.g "
             + self.filename
