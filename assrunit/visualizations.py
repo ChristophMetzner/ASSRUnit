@@ -7,13 +7,13 @@ import pprint
 def boxplot(data, labels):
     """Simple box plot function.
 
- 	Parameters
-	-----------------
-	data   : ndarray
-		nD array containing the data.
-	labels : list 
-		A list containing the axis labels.
-	"""
+        Parameters
+        -----------------
+        data   : ndarray
+                nD array containing the data.
+        labels : list 
+                A list containing the axis labels.
+        """
     plt.boxplot(data, labels=labels, showmeans=True)
     # plt.show()
 
@@ -27,16 +27,16 @@ def experimental_overview(
     plotting=True,
 ):
     """Gives an overview of the experimental observations in the database.
-	   Should make possible to query for specific studies, observation types
-	   and meta-data.
+           Should make possible to query for specific studies, observation types
+           and meta-data.
 
- 	Parameters
-	-----------------
-	
-	Returns
-	-----------------
-	
-	"""
+        Parameters
+        -----------------
+
+        Returns
+        -----------------
+
+        """
     # load database
 
     database = _load_obj(dbname)
@@ -297,13 +297,13 @@ def experimental_overview(
 def plot_statistics(stats, rowLables, colLabels):
     """
 
- 	Parameters
-	-----------------
-	
-	Returns
-	-----------------
-	
-	"""
+        Parameters
+        -----------------
+
+        Returns
+        -----------------
+
+        """
     fig = plt.figure()
     ax = fig.add_subplot(111)
     ax.table(cellText=stats, rowLabels=rowLabels, colLabels=colLabels, loc="center")
@@ -313,13 +313,13 @@ def plot_statistics(stats, rowLables, colLabels):
 def _plot_table(cellText, rowLabels, colLabels):
     """
 
- 	Parameters
-	-----------------
-	
-	Returns
-	-----------------
-	
-	"""
+        Parameters
+        -----------------
+
+        Returns
+        -----------------
+
+        """
     fig = plt.figure(figsize=(10, 20))
     ax = fig.add_subplot(111)
     ax.table(cellText=cellText, rowLabels=rowLabels, colLabels=colLabels, loc="center")
@@ -334,13 +334,13 @@ def _load_obj(name):
 def get_studies(dbname="Databases/ASSR_schizophrenia_experimental_database"):
     """Gives a list of all study identifiers in the database.
 
- 	Parameters
-	-----------------
-	
-	Returns
-	-----------------
-	
-	"""
+        Parameters
+        -----------------
+
+        Returns
+        -----------------
+
+        """
     # load database
 
     database = _load_obj(dbname)
@@ -355,13 +355,13 @@ def get_observations(
 ):
     """Gives a list of all observation identifiers in the database.
 
- 	Parameters
-	-----------------
-	
-	Returns
-	-----------------
-	
-	"""
+        Parameters
+        -----------------
+
+        Returns
+        -----------------
+
+        """
     # load database
 
     database = _load_obj(dbname)
@@ -385,12 +385,12 @@ def get_meta(
     dbname="Databases/ASSR_schizophrenia_experimental_database",
 ):
     """Gives a list of all study identifiers in the database.
- 	Parameters
-	-----------------
-	
-	Returns
-	-----------------
-	"""
+        Parameters
+        -----------------
+
+        Returns
+        -----------------
+        """
 
     # load database
     database = _load_obj(dbname)
@@ -399,6 +399,7 @@ def get_meta(
     for k in keys:
         mes = database[k][entrytype]["Meta"][item]
         print mes
-        itema = list(set(itema + [k + " :" + mes]))  # this creates a list of unique(!)
+        # this creates a list of unique(!)
+        itema = list(set(itema + [k + " :" + mes]))
 
     return itema

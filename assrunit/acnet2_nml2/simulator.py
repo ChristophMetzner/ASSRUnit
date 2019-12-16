@@ -1,12 +1,10 @@
 """
+A class for running a single instance of a NeuroML model and
+its LEMS file by using pyNeuroML to run in a chosen simulator
 
- A class for running a single instance of a NeuroML model and its  
- LEMS file by using pyNeuroML to run in a chosen simulator
+@author: Christoph Metzner
 
- @author: Christoph Metzner
-
- builds on NeuroMLSimulation from the PyNeuroML package
-    
+builds on NeuroMLSimulation from the PyNeuroML package
 """
 
 import sys
@@ -51,7 +49,7 @@ class Simulation(object):
 
         self.already_run = True
 
-        print self.simulator
+        print(self.simulator)
 
         start = time.time()
         if self.simulator == "jNeuroML":

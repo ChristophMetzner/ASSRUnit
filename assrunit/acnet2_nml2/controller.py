@@ -5,18 +5,11 @@
  @author: Christoph Metzner
 
  builds on NeuroMLController from the PyNeuroML package
-    
+
 """
+from pyneuroml.pynml import read_neuroml2_file, print_comment_v
 
-import os.path
-import sys
-import shutil
-
-from collections import OrderedDict
-from pyneuroml.pynml import read_neuroml2_file, write_neuroml2_file, print_comment_v
-from pyneuroml.pynml import read_lems_file, write_lems_file
-
-from Simulator import Simulation
+from .simulator import Simulation
 
 
 class Controller:
@@ -134,7 +127,7 @@ class Controller:
                         cell.biophysical_properties.membrane_properties.specific_capacitances
                     ):
                         if (
-                            sc.segment_groups == None and id2 == "all"
+                            sc.segment_groups is None and id2 == "all"
                         ) or sc.segment_groups == id2:
                             specCap = sc
 
@@ -162,7 +155,7 @@ class Controller:
                 if variable == "amplitude":
                     pg.amplitude = "%s %s" % (value, units)
             elif type == "synapse":
-                print "\n\n\n yes \n\n\n"
+                print("\n\n\n yes \n\n\n")
                 syn = None
                 for s in nml_doc.exp_two_synapses:
                     # print '\n\n\n'+str(s.id)+'\n\n\n'
@@ -174,7 +167,7 @@ class Controller:
                     syn.gbase = "%s %s" % (value, units)
                     # print '\n\n\n'+str(syn.gbase)+'\n\n\n'
             elif type == "NMDAsynapse":
-                print "\n\n\n yes \n\n\n"
+                print("\n\n\n yes \n\n\n")
                 syn = None
                 for s in nml_doc.blocking_plastic_synapses:
                     # print '\n\n\n'+str(s.id)+'\n\n\n'
@@ -191,15 +184,17 @@ class Controller:
                 )
 
         # new_neuroml_file =  '%s/%s'%(self.generate_dir,os.path.basename(self.neuroml_file))
-        new_lems_file = "%s/%s" % (self.generate_dir, os.path.basename(self.lems_file))
+        # new_lems_file = "%s/%s" % (self.generate_dir, os.path.basename(self.lems_file))
         # if new_neuroml_file == self.neuroml_file:
-        #    print_comment_v('Cannot use a directory for generating into (%s) which is the same location of the NeuroML file (%s)!'% \
+        #    print_comment_v('Cannot use a directory for generating into (%s) which is the same
+        #    location of the NeuroML file (%s)!'% \
         #              (self.neuroml_file, self.generate_dir))
 
         # write_neuroml2_file(nml_doc, new_neuroml_file)
 
         # copy LEMS file
-        # shutil.copy(self.lems_file,new_lems_file) # that doesn't work, because the paths for the included files are wrong
+        # shutil.copy(self.lems_file,new_lems_file) # that doesn't work, because the paths for the
+        # included files are wrong
 
         sim = Simulation(
             self.ref,

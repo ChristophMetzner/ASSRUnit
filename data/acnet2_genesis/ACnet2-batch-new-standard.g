@@ -321,11 +321,11 @@ print_avg_syn_number
 
 
 set_frequency {frequency}
-int i 	
+int i
 for (i=1; i <= {Ninputs}; i=i+1)
-    	setfield /MGBv[{i}]/spikepulse level1 1.0 
-    	setfield /MGBv[{i}]/spikepulse/spike abs_refract {1.0/{ct_frequency}}  
-end	
+    setfield /MGBv[{i}]/spikepulse level1 1.0
+    setfield /MGBv[{i}]/spikepulse/spike abs_refract {1.0/{ct_frequency}}
+end
 reset
 reset
 step_tmax 

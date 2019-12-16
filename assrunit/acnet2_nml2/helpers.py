@@ -1,31 +1,13 @@
-from neuroml import NeuroMLDocument
-from neuroml import Network
-from neuroml import Population
-from neuroml import Location
-from neuroml import Instance
-from neuroml import Projection
 from neuroml import Connection
-from neuroml import PulseGenerator
-from neuroml import ExplicitInput
-
-
-import math
-import random
-import numpy as np
-
-import neuroml.writers as writers
 
 
 def ellipse(x, y):
-
     a = 0.004
     b = 0.0015
 
     inside = 0
-    res = (x ** 2) / (a ** 2) + (y ** 2) / (b ** 2)
 
     if ((x * x) / (a * a) + (y * y) / (b * b)) < 1:
-
         inside = 1
 
     return inside
@@ -60,9 +42,6 @@ def add_connection(
 def getDAPCNumber(xscale, yscale):
     xSpacing = 0.008 / xscale
     ySpacing = 0.003 / yscale
-
-    print xSpacing
-    print ySpacing
 
     vapcNumber = 0
     dapcNumber = 0

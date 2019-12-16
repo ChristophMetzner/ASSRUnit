@@ -4,40 +4,35 @@
 #
 # @author: Christoph Metzner, 10/11/2017
 ####################################################################
-import math, sys, os, random
-import numpy as np
-
-from neuroml import NeuroMLDocument
-from neuroml import Network
-from neuroml import Population
-from neuroml import Location
-from neuroml import Instance
-from neuroml import Projection
-from neuroml import Connection
-from neuroml import PoissonFiringSynapse
-from neuroml import InputList
-from neuroml import Input
-from neuroml import TimedSynapticInput
-from neuroml import Spike
-from neuroml import SineGenerator
-from neuroml import ExplicitInput
-from neuroml import IncludeType
-
-from pyneuroml import pynml
-from pyneuroml.lems.LEMSSimulation import LEMSSimulation
-import lems.api as lems
-
-import neuroml.writers as writers
+import math
+import random
 
 import matplotlib.mlab as mlab
-import matplotlib.pyplot as plt
+import neuroml.writers as writers
+import numpy as np
+import sciunit
+from assrunit.acnet2_nml2.controller import Controller
+from assrunit.acnet2_nml2.helpers import add_connection
+from assrunit.capabilities import ProduceXY
+from neuroml import (
+    ExplicitInput,
+    IncludeType,
+    Input,
+    InputList,
+    Instance,
+    Location,
+    Network,
+    NeuroMLDocument,
+    PoissonFiringSynapse,
+    Population,
+    Projection,
+    SineGenerator,
+)
+from neuroml.utils import validate_neuroml2
+from pyneuroml.lems.LEMSSimulation import LEMSSimulation
 
-from ACnet2_NML2.Controller import Controller
-from ACnet2_NML2.helpingFunctions import add_connection
-from collections import OrderedDict
 
-
-class beemanNML2Model(object):
+class NML2Model(object):
     """
 
     """
@@ -112,8 +107,8 @@ class beemanNML2Model(object):
         inh_inh_syn = "GABA_syn_inh"
         inh_inh_syn_seg_id = 0  # Soma
 
-        aff_exc_syn = "AMPA_aff_syn"
-        aff_exc_syn_seg_id = 5  # proximal apical dendrite
+        # aff_exc_syn = "AMPA_aff_syn"
+        # aff_exc_syn_seg_id = 5  # proximal apical dendrite
 
         bg_exc_syn = "bg_AMPA_syn"
         bg_exc_syn_seg_id = 7  # Basal dendrite
@@ -237,7 +232,7 @@ class beemanNML2Model(object):
                 # print("Looking at connections for exc cell at (%i, %i)"%(i,j))
 
                 # exc -> exc  connections
-                conn_type = net_conn_exc_exc
+                # conn_type = net_conn_exc_exc
                 for k in range(0, XSCALE_ex):
                     for l in range(0, ZSCALE_ex):
 
@@ -250,7 +245,8 @@ class beemanNML2Model(object):
                             * math.exp(-((distance / (10.0 * xSpacing_ex)) ** 2))
                         )
 
-                        # create a random number between 0 and 1, if it is <= connection_probability
+                        # create a random number between 0 and 1,
+                        # if it is <= connection_probability
                         # accept connection otherwise refuse
                         a = random.random()
                         if 0 < a <= connection_probability:
@@ -273,7 +269,7 @@ class beemanNML2Model(object):
                             exc_exc_conn[index, index2] = 1
 
                 # exc -> inh  connections
-                conn_type = net_conn_exc_inh
+                # conn_type = net_conn_exc_inh
                 for k in range(0, XSCALE_inh):
                     for l in range(0, ZSCALE_inh):
 
@@ -286,7 +282,8 @@ class beemanNML2Model(object):
                             * math.exp(-((distance / (10.0 * xSpacing_ex)) ** 2))
                         )
 
-                        # create a random number between 0 and 1, if it is <= connection_probability
+                        # create a random number between 0 and 1,
+                        # if it is <= connection_probability
                         # accept connection otherwise refuse
                         a = random.random()
                         if 0 < a <= connection_probability:
@@ -322,7 +319,7 @@ class beemanNML2Model(object):
                 # print("Looking at connections for inh cell at (%i, %i)"%(i,j))
 
                 # inh -> exc  connections
-                conn_type = net_conn_inh_exc
+                # conn_type = net_conn_inh_exc
                 for k in range(0, XSCALE_ex):
                     for l in range(0, ZSCALE_ex):
 
@@ -335,7 +332,8 @@ class beemanNML2Model(object):
                             * math.exp(-((distance / (10.0 * xSpacing_ex)) ** 2))
                         )
 
-                        # create a random number between 0 and 1, if it is <= connection_probability
+                        # create a random number between 0 and 1,
+                        # if it is <= connection_probability
                         # accept connection otherwise refuse
                         a = random.random()
                         if 0 < a <= connection_probability:
@@ -358,7 +356,7 @@ class beemanNML2Model(object):
                             inh_exc_conn[index, index2] = 1
 
                 # inh -> inh  connections
-                conn_type = net_conn_inh_inh
+                # conn_type = net_conn_inh_inh
                 for k in range(0, XSCALE_inh):
                     for l in range(0, ZSCALE_inh):
 
@@ -371,7 +369,8 @@ class beemanNML2Model(object):
                             * math.exp(-((distance / (10.0 * xSpacing_ex)) ** 2))
                         )
 
-                        # create a random number between 0 and 1, if it is <= connection_probability
+                        # create a random number between 0 and 1,
+                        # if it is <= connection_probability
                         # accept connection otherwise refuse
                         a = random.random()
                         if 0 < a <= connection_probability:
@@ -393,12 +392,12 @@ class beemanNML2Model(object):
 
                             inh_inh_conn[index, index2] = 1
 
-        print (
+        print(
             "Generated network with %i exc_exc, %i exc_inh, %i inh_exc, %i inh_inh connections"
             % (count_exc_exc, count_exc_inh, count_inh_exc, count_inh_inh)
         )
 
-        #######   Create Input   ######
+        # Create Input
         # Create a sine generator
         sgE = SineGenerator(
             id="sineGen_0",
@@ -462,22 +461,19 @@ class beemanNML2Model(object):
                 )
             )
 
-        #######   Write to file  ######
-
-        print ("Saving to file...")
+        # Write to file
+        print("Saving to file...")
         nml_file = "../acnet2_nml2/" + self.filename + "_doc" + ".net.acnet2_nml2"
         writers.NeuroMLWriter.write(nml_doc, nml_file)
 
-        print ("Written network file to: " + nml_file)
+        print("Written network file to: " + nml_file)
 
-        ###### Validate the NeuroML ######
-
-        from neuroml.utils import validate_neuroml2
+        # Validate the NeuroML
 
         validate_neuroml2(nml_file)
-        print "-----------------------------------"
+        print("-----------------------------------")
 
-        ###### Output #######
+        # Output
 
         # Output membrane potential
         # Ex population
@@ -500,9 +496,9 @@ class beemanNML2Model(object):
         ls.include_neuroml2_file(nml_file)
 
         # Save to LEMS XML file
-        lems_file_name = ls.save_to_file(
-            file_name="../acnet2_nml2/LEMS_" + self.filename + ".xml"
-        )
+        # lems_file_name = ls.save_to_file(
+        #     file_name="../acnet2_nml2/LEMS_" + self.filename + ".xml"
+        # )
 
     def singleRun(self):
 
@@ -526,9 +522,9 @@ class beemanNML2Model(object):
         )
 
         cont.run_individual(sim_vars, show=False)
-        print "\n\n\n"
-        print ("Have run individual instance...")
-        print "\n\n\n"
+        print("\n\n\n")
+        print("Have run individual instance...")
+        print("\n\n\n")
 
     def analyse(self, powerfrequency):
         data = np.genfromtxt("../acnet2_nml2/results/v_exc.dat", dtype=np.float)
@@ -549,3 +545,55 @@ class beemanNML2Model(object):
         power = np.sum(pxx[lbound:ubound])
 
         return power
+
+
+class BeemanNML2Model(sciunit.Model, ProduceXY):
+    """NeuroML2 of the auditory cortex model from Beeman (2013)"""
+
+    def __init__(self, controlparams, schizparams):
+        """
+        Constructor method. Both parameter sets, for the control and the schizophrenia-like
+        network, have to be a dictionary containing the following parmaeters
+        (Filename,Stimulation Frequency,Random Seed,E-E Weight,I-E Weight,E-I Weight,I-I Weight,
+        Background Noise Weight,E-Drive Weight,I-Drive
+        Weight,Background Noise Frequency)
+        Parameters:
+        controlparams: Parameters for the control network
+        schizparams: Parameters for the schizophrenia-like network
+        name: name of the instance
+        """
+        self.controlparams = controlparams
+        self.schizparams = schizparams
+        super(BeemanNML2Model, self).__init__(
+            controlparams=controlparams, schizparams=schizparams
+        )
+
+    def produce_XY(self, stimfrequency=40.0, powerfrequency=40.0):
+        """
+        Simulates Y Hz drive to the control and the schizophrenia-like network for all
+        random seeds, calculates a Fourier transform of the simulated MEG
+        and extracts the power in the X Hz frequency band for each simulation.
+        Returns the mean power for the control and the schizophrenia-like network, respectively.
+        """
+        drive_period = (
+            1.0 / stimfrequency
+        ) * 1000  # calculate drive period (in ms) from stimulation frequency
+        # generate the control network and run simulation
+        print("Generating control model")
+        ctrl_model = NML2Model(self.controlparams, drive_period)
+        ctrl_model.createModel()
+        print("Running control model")
+        ctrl_model.singleRun()
+        print("Analysing control model")
+        controlXY = ctrl_model.analyse(powerfrequency)
+
+        # generate the schizophrenia-like network and run simulation
+        print("Generating schizophrenia model")
+        schiz_model = BeemanNML2Model(self.schizparams, drive_period)
+        schiz_model.createModel()
+        print("Running control model")
+        schiz_model.singleRun()
+        print("Analysing control model")
+        schizXY = schiz_model.analyse(powerfrequency)
+
+        return [controlXY, schizXY]

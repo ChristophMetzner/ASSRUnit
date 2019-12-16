@@ -1,9 +1,29 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# ### How to generate predictions
+
+# In[21]:
+
+
+import sciunit
+import sys
+
+sys.path.append("/home/cm15acr/ASSRUnit/Code")
+
+from sciunit.scores import RatioScore  # One of several SciUnit score types.
+from capabilities import ProduceXY
+
 from models import VierlingSimpleModel
-from tests.tests import PredictionTest1010
-from prediction import addPrediction
+from testsAndPredictionTests import PredictionTest1010
+from predictionDatabaseFunctions import addPrediction
 
 
-# model parameters
+# #### Parameters
+
+# In[22]:
+
+
 controlparams_model = {
     "n_ex": 20,
     "n_inh": 10,
@@ -49,18 +69,41 @@ schizparams_model = {
     "directory": "/",
 }
 
-# create model instance
+
+# #### Instantiate model
+
+# In[23]:
+
+
 model = VierlingSimpleModel(controlparams_model, schizparams_model)
 
-# create test instance
+
+# #### Create test
+
+# In[24]:
+
+
 prediction_test_1010 = PredictionTest1010()
 
-# run and judge model
+
+# #### Use 'judge' method to simulate the model and create the prediction
+
+# In[25]:
+
+
 score = prediction_test_1010.judge(model)
 
-# add prediction to database
+
+# #### Add prediction to database
+
+# In[26]:
+
+
 measure = prediction_test_1010.name
 model = model.name
 name = "VierlingSimpleModel-1010"
-dbname = "ASSR_schizophrenia_prediction_database"
+dbname = "../Databases/ASSR_schizophrenia_prediction_database"
 addPrediction(score, measure, model, name, dbname)
+
+
+# In[ ]:

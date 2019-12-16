@@ -18,10 +18,12 @@ class Test4040(sciunit.Test):
     def __init__(
         self, observation={"ratio": 0.4}, name="Reduction of 40Hz power to 40Hz drive"
     ):
-        sciunit.Test.__init__(self, observation, name)  # Call the base constructor.
+        # Call the base constructor.
+        sciunit.Test.__init__(self, observation, name)
         self.required_capabilities = (ProduceXY,)
 
-    score_type = BooleanScore  # This test's 'judge' method will return a BooleanScore.
+    # This test's 'judge' method will return a BooleanScore.
+    score_type = BooleanScore
 
     def generate_prediction(self, model):
         [control4040, schiz4040] = model.produce_XY(
@@ -49,10 +51,12 @@ class Test3030(sciunit.Test):
     def __init__(
         self, observation={"ratio": 1.0}, name="No change of 30Hz power to 30Hz drive"
     ):
-        sciunit.Test.__init__(self, observation, name)  # Call the base constructor.
+        # Call the base constructor.
+        sciunit.Test.__init__(self, observation, name)
         self.required_capabilities = (ProduceXY,)
 
-    score_type = BooleanScore  # This test's 'judge' method will return a BooleanScore.
+    # This test's 'judge' method will return a BooleanScore.
+    score_type = BooleanScore
 
     def generate_prediction(self, model):
         [control3030, schiz3030] = model.produce_XY(
@@ -79,10 +83,12 @@ class Test2020(sciunit.Test):
     def __init__(
         self, observation={"ratio": 1.4}, name="Increase of 20Hz power to 20Hz drive"
     ):
-        sciunit.Test.__init__(self, observation, name)  # Call the base constructor.
+        # Call the base constructor.
+        sciunit.Test.__init__(self, observation, name)
         self.required_capabilities = (ProduceXY,)
 
-    score_type = BooleanScore  # This test's 'judge' method will return a BooleanScore.
+    # This test's 'judge' method will return a BooleanScore.
+    score_type = BooleanScore
 
     def generate_prediction(self, model):
         [control2020, schiz2020] = model.produce_XY(
@@ -110,10 +116,12 @@ class Test2040(sciunit.Test):
     def __init__(
         self, observation={"ratio": 1.4}, name="Increase of 20Hz power to 40Hz drive"
     ):
-        sciunit.Test.__init__(self, observation, name)  # Call the base constructor.
+        # Call the base constructor.
+        sciunit.Test.__init__(self, observation, name)
         self.required_capabilities = (ProduceXY,)
 
-    score_type = BooleanScore  # This test's 'judge' method will return a BooleanScore.
+    # This test's 'judge' method will return a BooleanScore.
+    score_type = BooleanScore
 
     def generate_prediction(self, model):
         [control2040, schiz2040] = model.produce_XY(
@@ -141,10 +149,12 @@ class Test4020(sciunit.Test):
     def __init__(
         self, observation={"ratio": 1.4}, name="Decrease of 40Hz power to 20Hz drive"
     ):
-        sciunit.Test.__init__(self, observation, name)  # Call the base constructor.
+        # Call the base constructor.
+        sciunit.Test.__init__(self, observation, name)
         self.required_capabilities = (ProduceXY,)
 
-    score_type = BooleanScore  # This test's 'judge' method will return a BooleanScore.
+    # This test's 'judge' method will return a BooleanScore.
+    score_type = BooleanScore
 
     def generate_prediction(self, model):
         [control4020, schiz4020] = model.produce_XY(
@@ -172,7 +182,8 @@ class PredictionTest1010(sciunit.Test):
     def __init__(
         self, observation={"ratio": 1.4}, name="Prediction: 10Hz power to 10Hz drive"
     ):
-        sciunit.Test.__init__(self, observation, name)  # Call the base constructor.
+        # Call the base constructor.
+        sciunit.Test.__init__(self, observation, name)
         self.required_capabilities = (ProduceXY,)
 
     score_type = RatioScore
