@@ -41,7 +41,7 @@ class GenesisModel(object):
         """
 
         # put the execution string together
-        execstring = "/usr/local/genesis-2.4/genesis/genesis -nosimrc -batch {} {} {} {} {} {} {} {} {} {} {} {}".format(
+        execstring = "genesis {} {} {} {} {} {} {} {} {} {} {} {}".format(
             os.path.join(ACNET2_GENESIS_PATH, "ACnet2-batch-new-standard.g"),
             self.filename,
             str(stimfrequency),

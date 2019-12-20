@@ -11,15 +11,10 @@
 
 
 import sciunit
-import sys
 
-sys.path.append("/home/cm15acr/ASSRUnit/Code")
+from assrunit.models import VierlingSimpleModel
 
-from capabilities import ProduceXY
-
-from models import VierlingSimpleModel
-
-from testsAndPredictionTests import Test4040, Test3030, Test2020, Test2040, Test4020
+from assrunit.tests.test_and_prediction_tests import Test4040, Test3030, Test2020, Test2040, Test4020
 
 
 # ### Parameters
@@ -89,23 +84,23 @@ test_model = VierlingSimpleModel(controlparams, schizparams)
 
 test_4040 = Test4040(observation={"ratio": 0.5})
 score_4040 = test_4040.judge(test_model)
-print score_4040
+print(score_4040)
 
 test_3030 = Test3030(observation={"ratio": 1.0})
 score_3030 = test_3030.judge(test_model)
-print score_3030
+print(score_3030)
 
 test_2020 = Test2020(observation={"ratio": 1.0})
 score_2020 = test_2020.judge(test_model)
-print score_2020
+print(score_2020)
 
 test_2040 = Test2040(observation={"ratio": 1.0})
 score_2040 = test_2040.judge(test_model)
-print score_2040
+print(score_2040)
 
 test_4020 = Test4020(observation={"ratio": 1.0})
 score_4020 = test_4020.judge(test_model)
-print score_4020
+print(score_4020)
 
 
 # ### A test suite
