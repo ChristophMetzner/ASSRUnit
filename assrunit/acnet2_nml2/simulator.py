@@ -7,7 +7,6 @@ its LEMS file by using pyNeuroML to run in a chosen simulator
 builds on NeuroMLSimulation from the PyNeuroML package
 """
 
-import sys
 import time
 
 from pyneuroml import pynml

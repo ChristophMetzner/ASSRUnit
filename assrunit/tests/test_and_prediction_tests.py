@@ -35,7 +35,7 @@ class Test4040(sciunit.Test):
         if prediction[0] > 0.0:
             result = {"ratio": prediction[1] / prediction[0]}
         score = self.score_type(
-            result["ratio"] < observation["ratio"]
+            bool(result["ratio"] < observation["ratio"])
         )  # Returns a BooleanScore.
         score.description = (
             "Passing score if the prediction is smaller than the observation"
@@ -69,7 +69,7 @@ class Test3030(sciunit.Test):
         if prediction[0] > 0.0:
             result = {"ratio": prediction[1] / prediction[0]}
         score = self.score_type(
-            (abs(result["ratio"] - observation["ratio"]) < epsilon)
+            bool((abs(result["ratio"] - observation["ratio"]) < epsilon))
         )  # Returns a BooleanScore.
         score.description = "Passing score if the prediction equals the observation (witin a given range)"
         return score
@@ -100,7 +100,7 @@ class Test2020(sciunit.Test):
         if prediction[0] > 0.0:
             result = {"ratio": prediction[1] / prediction[0]}
         score = self.score_type(
-            result["ratio"] > observation["ratio"]
+            bool(result["ratio"] > observation["ratio"])
         )  # Returns a BooleanScore.
         score.description = (
             "Passing score if the prediction is larger than the observation"
@@ -133,7 +133,7 @@ class Test2040(sciunit.Test):
         if prediction[0] > 0.0:
             result = {"ratio": prediction[1] / prediction[0]}
         score = self.score_type(
-            result["ratio"] > observation["ratio"]
+            bool(result["ratio"] > observation["ratio"])
         )  # Returns a BooleanScore.
         score.description = (
             "Passing score if the prediction is larger than the observation"
@@ -166,7 +166,7 @@ class Test4020(sciunit.Test):
         if prediction[0] > 0.0:
             result = {"ratio": prediction[1] / prediction[0]}
         score = self.score_type(
-            result["ratio"] > observation["ratio"]
+            bool(result["ratio"] > observation["ratio"])
         )  # Returns a BooleanScore.
         score.description = (
             "Passing score if the prediction is larger than the observation"

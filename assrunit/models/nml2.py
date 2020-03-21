@@ -6,11 +6,14 @@
 ####################################################################
 import math
 import random
+import os
 
 import matplotlib.mlab as mlab
 import neuroml.writers as writers
 import numpy as np
 import sciunit
+
+from assrunit.constants import DATA_PATH
 from assrunit.acnet2_nml2.controller import Controller
 from assrunit.acnet2_nml2.helpers import add_connection
 from assrunit.capabilities import ProduceXY
@@ -501,12 +504,12 @@ class NML2Model(object):
         # )
 
     def singleRun(self):
+        nml_file = os.path.join(DATA_PATH, "acnet2_nml2", self.filename, "_doc.net.acnet2_nml2")
+        lems_file = os.path.join(DATA_PATH, "acnet2_nml2", "LEMS_", self.filename, ".xml")
 
-        nml_file = "../acnet2_nml2/" + self.filename + "_doc" + ".net.acnet2_nml2"
-        lems_file = "../acnet2_nml2/" + "LEMS_" + self.filename + ".xml"
         target = self.filename + "_net"
         simulator = "jNeuroML_NEURON"
-        generate_dir = "../acnet2_nml2"
+        generate_dir = os.path.join(DATA_PATH, "acnet2_nml2")
 
         sim_vars = {}
         # set up Controller

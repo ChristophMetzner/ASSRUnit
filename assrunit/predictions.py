@@ -1,6 +1,6 @@
-from models import VierlingSimpleModel
-from tests.tests import PredictionTest1010
-from prediction import addPrediction
+from assrunit.models import VierlingSimpleModel
+from assrunit.tests.test_and_prediction_tests import PredictionTest1010
+from assrunit.prediction_database_functions import add_prediction
 
 
 # model parameters
@@ -49,18 +49,14 @@ schizparams_model = {
     "directory": "/",
 }
 
-# create model instance
+# Create model instance
 model = VierlingSimpleModel(controlparams_model, schizparams_model)
 
-# create test instance
+# Create test instance
 prediction_test_1010 = PredictionTest1010()
 
-# run and judge model
+# Run and judge model
 score = prediction_test_1010.judge(model)
 
-# add prediction to database
-measure = prediction_test_1010.name
-model = model.name
-name = "VierlingSimpleModel-1010"
-dbname = "ASSR_schizophrenia_prediction_database"
-addPrediction(score, measure, model, name, dbname)
+# Save to DB
+add_prediction(model_name=model.name, power=10, drive=10, score=score, description=prediction_test_1010.name)

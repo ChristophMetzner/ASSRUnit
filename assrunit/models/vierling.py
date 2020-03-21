@@ -455,8 +455,8 @@ class VierlingSimpleModel(sciunit.Model, ProduceXY):
 
     def produce_XY(self, stimfrequency=40.0, powerfrequency=40.0):
 
-        lbound = (powerfrequency / 2) - 1
-        ubound = (powerfrequency / 2) + 2
+        lbound = int((powerfrequency / 2) - 1)
+        ubound = int((powerfrequency / 2) + 2)
 
         # generate the control network and run simulation
         control_model = SimpleModel(self.controlparams)
@@ -467,6 +467,7 @@ class VierlingSimpleModel(sciunit.Model, ProduceXY):
         print("Control model simulated")
         control_pxx, freqs = control_model.calculatePSD(control_meg, self.time)
         print("Control PSD calculated")
+
         # Frequency range from 38-42Hz
         controlXY = np.sum(control_pxx[lbound:ubound])
 
@@ -523,7 +524,7 @@ class VierlingSimpleModelRobust(sciunit.Model, ProduceXY):
             print("Control model simulated")
             control_pxx, freqs = control_model.calculatePSD(control_meg, self.time)
             print("Control PSD calculated")
-            controlXY[i] = np.sum(control_pxx[lbound:ubound])
+            controlXY[i] = np.sum(control_pxx[int(lbound):int(ubound)])
 
             # generate the schizophrenia-like network and run simulation
             schiz_model = SimpleModel(self.schizparams)
@@ -532,7 +533,7 @@ class VierlingSimpleModelRobust(sciunit.Model, ProduceXY):
             print("Schiz model simulated")
             schiz_pxx, freqs = schiz_model.calculatePSD(schiz_meg, self.time)
             print("Schiz PSD calculated")
-            schizXY[i] = np.sum(schiz_pxx[lbound:ubound])
+            schizXY[i] = np.sum(schiz_pxx[int(lbound):int(ubound)])
 
         mcontrolXY = np.mean(controlXY)
         mschizXY = np.mean(schizXY)
@@ -563,7 +564,7 @@ class VierlingSimpleModelRobust(sciunit.Model, ProduceXY):
             print("Control model simulated")
             control_pxx, freqs = control_model.calculatePSD(control_meg, self.time)
             print("Control PSD calculated")
-            controlXY[i] = np.sum(control_pxx[lbound:ubound])
+            controlXY[i] = np.sum(control_pxx[int(lbound):int(ubound)])
 
             # generate the schizophrenia-like network and run simulation
             schiz_model = SimpleModel(self.schizparams)
@@ -572,7 +573,7 @@ class VierlingSimpleModelRobust(sciunit.Model, ProduceXY):
             print("Schiz model simulated")
             schiz_pxx, freqs = schiz_model.calculatePSD(schiz_meg, self.time)
             print("Schiz PSD calculated")
-            schizXY[i] = np.sum(schiz_pxx[lbound:ubound])
+            schizXY[i] = np.sum(schiz_pxx[int(lbound):int(ubound)])
 
         mcontrolXY = np.mean(controlXY)
         mschizXY = np.mean(schizXY)
