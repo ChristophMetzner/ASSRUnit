@@ -10,3 +10,4 @@ x86_64
 *net.nml
 *.txt
 build
+.idea/*

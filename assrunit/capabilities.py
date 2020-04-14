@@ -12,5 +12,5 @@ class ProduceXY(sciunit.Capability):
 
     def produce_XY(self):
         """The implementation of this method should return the power at X Hz for Y Hz drive of  
-	the 'schizophrenia-like' and the control network."""
+        the 'schizophrenia-like' and the control network."""
         raise NotImplementedError("Must implement produce_XY.")
