@@ -11,16 +11,6 @@ ASSRUnit is a module that integrates databases of experimental studies on ASSR d
 For more information see this [article](). For examples that illustrate how to use ASSRUnit see [here](https://github.com/ChristophMetzner/ASSRUnit/tree/master/Code/Notebooks).
 
 ## Dependencies
-In order to use ASSRUnit you need the following packages:
-+ [Python 2.7]()
-+ [SciUnit](https://github.com/scidash/sciunit)
-+ [NumPy](http://www.numpy.org/)
-+ [Matplotlib](https://matplotlib.org/)
-
 In order to run some of the example notebooks and models you will additionally need to install the following simulators and tools:
 + [GENESIS](http://genesis-sim.org/) for the GENESIS version of the ACnet2 model
 + [pyNeuroML](https://github.com/NeuroML/pyNeuroML) and [Neuron](https://www.neuron.yale.edu/neuron/) for the NeuroML2 version of the ACnet2 model
-
-In order to run the example notebooks you will need [Jupyter notebook](http://jupyter.org/).
-
-If you want to use ASSRUnit, clone or download the repository and get started. 
